@@ -1,9 +1,9 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.exception.ResourceNotFoundException;
 import gabrielzrz.com.github.model.Person;
+import gabrielzrz.com.github.repository.PersonRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
@@ -16,52 +16,47 @@ public class PersonServiceImpl implements PersonService {
 
     private final AtomicLong counter = new AtomicLong();
     private Logger logger = Logger.getLogger(PersonServiceImpl.class.getName());
+    private final PersonRepository personRepository;
+
+    public PersonServiceImpl(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
-    public Person findById(String id){
+    public Person findById(Long id){
         logger.info("Find person by ID");
-        Person person = new Person();
-        person.setId(counter.incrementAndGet());
-        person.setName("Gabriel zorzi");
-        person.setAddress("rua vicente machado");
-        person.setGender("Male");
-        return person;
+        return personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
     }
 
     @Override
     public List<Person> findAll(){
         logger.info("Find all people");
-        List<Person> people = new ArrayList<>();
-        for(int i = 0; i < 8; i++) {
-            Person person = new Person();
-            person.setId(counter.incrementAndGet());
-            person.setName("Gabriel zorzi");
-            person.setAddress("rua vicente machado");
-            person.setGender("Male");
-            people.add(person);
-        }
-        return people;
+        return personRepository.findAll();
     }
 
     @Override
     public Person create(Person person) {
         logger.info("Create person");
-
-        return person;
+        return personRepository.save(person);
     }
 
     @Override
     public Person update(Person person) {
         logger.info("udpate person");
 
-        return person;
+        Person entity = personRepository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + person.getId()));
+
+        entity.setName(person.getName());
+        entity.setAddress(person.getAddress());
+        entity.setGender(person.getGender());
+
+        return personRepository.save(entity);
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         logger.info("delete person");
-
-
+        Person entity = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
+        personRepository.delete(entity);
     }
-
 }

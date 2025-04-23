@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface PersonService {
 
-    Person findById(String id);
+    Person findById(Long id);
 
     List<Person> findAll();
 
@@ -17,5 +17,5 @@ public interface PersonService {
 
     Person update(Person person);
 
-    void delete(String id);
+    void delete(Long id);
 }

@@ -3,6 +3,7 @@ package gabrielzrz.com.github.controllers;
 import gabrielzrz.com.github.Service.PersonService;
 import gabrielzrz.com.github.model.Person;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class PersonController {
 
     //GET
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Person findById(@PathVariable("id") String id) {
+    public Person findById(@PathVariable("id") Long id) {
         return personService.findById(id);
     }
 
@@ -48,8 +49,9 @@ public class PersonController {
     }
 
     //DELETE
-    @DeleteMapping ()
-    public void delete(@PathVariable String id) {
+    @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         personService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

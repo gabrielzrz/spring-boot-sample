@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.Objects;
 
 @Entity
 @Audited
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "person")
 public class Person implements Serializable {
 
@@ -31,7 +33,7 @@ public class Person implements Serializable {
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 
-    @LastModifiedDate
+    //@LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
 
@@ -50,6 +52,11 @@ public class Person implements Serializable {
 
     //Methods
     public Person() {
+    }
+
+    @PreUpdate
+    public void setUpdatedAt() {
+        this.updatedAt = Instant.now();
     }
 
     //Getters && Setters
@@ -79,6 +86,30 @@ public class Person implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     //Equals && HashCode
