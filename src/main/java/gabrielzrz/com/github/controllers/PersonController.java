@@ -1,6 +1,7 @@
 package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.PersonService;
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.model.Person;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ public class PersonController {
 
     //GET
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Person findById(@PathVariable("id") Long id) {
+    public PersonDTO findById(@PathVariable("id") Long id) {
         return personService.findById(id);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         return personService.findAll();
     }
 
@@ -36,7 +37,7 @@ public class PersonController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Person create(@RequestBody Person person) {
+    public PersonDTO create(@RequestBody PersonDTO person) {
         return personService.create(person);
     }
 
@@ -44,7 +45,7 @@ public class PersonController {
     @PutMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Person udpate(@RequestBody Person person) {
+    public PersonDTO udpate(@RequestBody PersonDTO person) {
         return personService.update(person);
     }
 

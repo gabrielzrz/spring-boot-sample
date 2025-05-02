@@ -1,12 +1,16 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.controllers.TestLogController;
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
+import gabrielzrz.com.github.mapper.ObjectMapper;
 import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.repository.PersonRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
 /**
  * @author Zorzi
@@ -15,7 +19,7 @@ import java.util.logging.Logger;
 public class PersonServiceImpl implements PersonService {
 
     private final AtomicLong counter = new AtomicLong();
-    private Logger logger = Logger.getLogger(PersonServiceImpl.class.getName());
+    private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName());
     private final PersonRepository personRepository;
 
     public PersonServiceImpl(PersonRepository personRepository) {
@@ -23,34 +27,34 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person findById(Long id){
+    public PersonDTO findById(Long id){
         logger.info("Find person by ID");
-        return personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
+        var entity = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
+        return ObjectMapper.parseObject(entity, PersonDTO.class);
     }
 
     @Override
-    public List<Person> findAll(){
+    public List<PersonDTO> findAll(){
         logger.info("Find all people");
-        return personRepository.findAll();
+        return ObjectMapper.parseListObject(personRepository.findAll(), PersonDTO.class);
     }
 
     @Override
-    public Person create(Person person) {
+    public PersonDTO create(PersonDTO person) {
         logger.info("Create person");
-        return personRepository.save(person);
+        Person p = ObjectMapper.parseObject(person, Person.class);
+        var entity = personRepository.save(p);
+        return ObjectMapper.parseObject(entity, PersonDTO.class);
     }
 
     @Override
-    public Person update(Person person) {
-        logger.info("udpate person");
-
+    public PersonDTO update(PersonDTO person) {
+        logger.info("update person");
         Person entity = personRepository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + person.getId()));
-
         entity.setName(person.getName());
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
-
-        return personRepository.save(entity);
+        return ObjectMapper.parseObject(personRepository.save(entity), PersonDTO.class);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.model.Person;
 
 import java.util.List;
@@ -9,13 +10,13 @@ import java.util.List;
  */
 public interface PersonService {
 
-    Person findById(Long id);
+    PersonDTO findById(Long id);
 
-    List<Person> findAll();
+    List<PersonDTO> findAll();
 
-    Person create(Person person);
+    PersonDTO create(PersonDTO person);
 
-    Person update(Person person);
+    PersonDTO update(PersonDTO person);
 
     void delete(Long id);
 }
