@@ -1,7 +1,8 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.controllers.TestLogController;
-import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.v1.PersonDTO;
+import gabrielzrz.com.github.dto.v2.PersonDTOV2;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
 import gabrielzrz.com.github.mapper.ObjectMapper;
 import gabrielzrz.com.github.model.Person;
@@ -45,6 +46,14 @@ public class PersonServiceImpl implements PersonService {
         Person p = ObjectMapper.parseObject(person, Person.class);
         var entity = personRepository.save(p);
         return ObjectMapper.parseObject(entity, PersonDTO.class);
+    }
+
+    @Override
+    public PersonDTOV2 create(PersonDTOV2 person) {
+        logger.info("Create person V2");
+        Person p = ObjectMapper.parseObject(person, Person.class);
+        var entity = personRepository.save(p);
+        return ObjectMapper.parseObject(entity, PersonDTOV2.class);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package gabrielzrz.com.github.unitetests.mapper;
 
-import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.v1.PersonDTO;
 import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.unitetests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;

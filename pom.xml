@@ -6,7 +6,6 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.4</version>
-<!--		<version>3.3.10</version>-->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>gabrielzrz.com.github</groupId>
@@ -17,6 +16,9 @@
 	<properties>
 		<java.version>21</java.version>
 		<dozer.version>7.0.0</dozer.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<resource.dir>${basedir}/src/main/resources</resource.dir>
+		<javassist.version>3.30.2-GA</javassist.version>
 	</properties>
 	<dependencies>
 		<!--Spring Boot-->
@@ -40,7 +42,6 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-<!--			<version>42.3.5</version>-->
 			<scope>runtime</scope>
 		</dependency>
 
@@ -48,21 +49,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-<!--			<exclusions>-->
-<!--				&lt;!&ndash; Exclude Hibernate core &ndash;&gt;-->
-<!--				<exclusion>-->
-<!--					<groupId>org.hibernate</groupId>-->
-<!--					<artifactId>hibernate-core</artifactId>-->
-<!--				</exclusion>-->
-<!--			</exclusions>-->
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate.orm</groupId>-->
-<!--			<artifactId>hibernate-core</artifactId>-->
-<!--			<version>6.5.3.Final</version>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-envers</artifactId>
@@ -80,6 +67,10 @@
 		</dependency>
 
 		<!--Liquibase-->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -88,7 +79,44 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<!--Liquibase diff and update-->
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<searchPath>${resource.dir}</searchPath>
+					<propertyFile>db/liquibase.properties</propertyFile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-data-jpa</artifactId>
+						<version>${project.parent.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.liquibase</groupId>
+						<artifactId>liquibase-core</artifactId>
+						<version>${liquibase.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate6</artifactId>
+						<version>${liquibase.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>jakarta.validation</groupId>
+						<artifactId>jakarta.validation-api</artifactId>
+						<version>${jakarta-validation.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.javassist</groupId>
+						<artifactId>javassist</artifactId>
+						<version>${javassist.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>

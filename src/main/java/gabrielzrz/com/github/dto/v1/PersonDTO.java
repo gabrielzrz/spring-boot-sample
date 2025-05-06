@@ -1,11 +1,7 @@
-package gabrielzrz.com.github.dto;
-
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
+package gabrielzrz.com.github.dto.v1;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Objects;
 
 public class PersonDTO implements Serializable {

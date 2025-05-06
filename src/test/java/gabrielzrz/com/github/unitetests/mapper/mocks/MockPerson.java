@@ -1,6 +1,6 @@
 package gabrielzrz.com.github.unitetests.mapper.mocks;
 
-import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.v1.PersonDTO;
 import gabrielzrz.com.github.model.Person;
 
 import java.util.ArrayList;

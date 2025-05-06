@@ -4,12 +4,12 @@ package gabrielzrz.com.github.model;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -49,6 +49,9 @@ public class Person implements Serializable {
 
     @Column(name = "gender", nullable = false)
     private String gender;
+
+    @Column(name = "birth_day")
+    private LocalDate birthDay;
 
     //Methods
     public Person() {
@@ -110,6 +113,14 @@ public class Person implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public LocalDate getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(LocalDate birthDay) {
+        this.birthDay = birthDay;
     }
 
     //Equals && HashCode

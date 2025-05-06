@@ -1,8 +1,8 @@
 package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.PersonService;
-import gabrielzrz.com.github.dto.PersonDTO;
-import gabrielzrz.com.github.model.Person;
+import gabrielzrz.com.github.dto.v1.PersonDTO;
+import gabrielzrz.com.github.dto.v2.PersonDTOV2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +38,14 @@ public class PersonController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public PersonDTO create(@RequestBody PersonDTO person) {
+        return personService.create(person);
+    }
+
+    //POST
+    @PostMapping(path="/v2",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public PersonDTOV2 create(@RequestBody PersonDTOV2 person) {
         return personService.create(person);
     }
 
