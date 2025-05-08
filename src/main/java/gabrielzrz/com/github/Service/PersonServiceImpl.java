@@ -9,6 +9,8 @@ import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -49,11 +51,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDTOV2 create(PersonDTOV2 person) {
+    public Person create(PersonDTOV2 person) {
         logger.info("Create person V2");
         Person p = ObjectMapper.parseObject(person, Person.class);
-        var entity = personRepository.save(p);
-        return ObjectMapper.parseObject(entity, PersonDTOV2.class);
+        return personRepository.save(p);
     }
 
     @Override

@@ -1,20 +1,29 @@
 package gabrielzrz.com.github.dto.v2;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@JsonFilter("PersonFilter")
 public class PersonDTOV2 implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -886655505965555061L;
 
     private Long id;
+
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("adress")
     private String address;
+    @JsonProperty("gender")
     private String gender;
+    @JsonProperty("birthDay")
     private LocalDate birthDay;
 
     //Getters && Setters
