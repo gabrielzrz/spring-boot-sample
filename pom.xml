@@ -19,6 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<resource.dir>${basedir}/src/main/resources</resource.dir>
 		<javassist.version>3.30.2-GA</javassist.version>
+		<liquibase.version>4.27.0</liquibase.version>
 	</properties>
 	<dependencies>
 		<!--Spring Boot-->
@@ -95,7 +96,7 @@
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<version>${liquibase.version}</version>
 				<configuration>
-					<searchPath>${resource.dir}</searchPath>
+					<searchPath>src/main/resources</searchPath>
 					<propertyFile>db/liquibase.properties</propertyFile>
 				</configuration>
 				<dependencies>
