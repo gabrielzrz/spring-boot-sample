@@ -2,6 +2,7 @@ package gabrielzrz.com.github.dto.v2;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @JsonFilter("PersonFilter")
-public class PersonDTOV2 implements Serializable {
+public class PersonDTOV2 extends RepresentationModel<PersonDTOV2> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -886655505965555061L;
@@ -19,7 +20,7 @@ public class PersonDTOV2 implements Serializable {
 
     @JsonProperty("name")
     private String name;
-    @JsonProperty("adress")
+    @JsonProperty("address")
     private String address;
     @JsonProperty("gender")
     private String gender;

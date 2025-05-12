@@ -1,18 +1,27 @@
 package gabrielzrz.com.github.dto.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
-public class PersonDTO implements Serializable {
+public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -886655505965555061L;
 
     private Long id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("address")
     private String address;
+    @JsonProperty("gender")
     private String gender;
+    @JsonProperty("birthDay")
+    private LocalDate birthDay;
 
     //Getters && Setters
     public Long getId() {
@@ -45,6 +54,14 @@ public class PersonDTO implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public LocalDate getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(LocalDate birthDay) {
+        this.birthDay = birthDay;
     }
 
     //Equals && HashCode

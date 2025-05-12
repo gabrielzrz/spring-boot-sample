@@ -16,9 +16,7 @@ public interface PersonService {
 
     List<PersonDTO> findAll();
 
-    PersonDTO create(PersonDTO person);
-
-    Person create(PersonDTOV2 person);
+    Person create(PersonDTO person);
 
     PersonDTO update(PersonDTO person);
 

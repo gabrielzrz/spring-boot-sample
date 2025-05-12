@@ -34,10 +34,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .mediaType("yml", MediaType.valueOf("application/x-yaml"));
     }
 
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("/api", HandlerTypePredicate.forBasePackage("gabrielzrz.com.github.controllers"));
-    }
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer) {
+//        configurer.addPathPrefix("/api", HandlerTypePredicate.forBasePackage("gabrielzrz.com.github.controllers"));
+//    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
