@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.dto.v1;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -20,7 +21,9 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String address;
     @JsonProperty("gender")
     private String gender;
+
     @JsonProperty("birthDay")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDay;
 
     //Getters && Setters
