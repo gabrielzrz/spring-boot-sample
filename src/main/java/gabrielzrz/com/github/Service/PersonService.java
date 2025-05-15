@@ -1,11 +1,11 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.dto.v1.PersonDTO;
-import gabrielzrz.com.github.dto.v2.PersonDTOV2;
 import gabrielzrz.com.github.model.Person;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 /**
  * @author Zorzi
@@ -14,11 +14,15 @@ public interface PersonService {
 
     PersonDTO findById(Long id);
 
-    List<PersonDTO> findAll();
+    PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable);
+
+    PagedModel<EntityModel<PersonDTO>> findPersonByName(String name, Pageable pageable);
 
     Person create(PersonDTO person);
 
     PersonDTO update(PersonDTO person);
 
     void delete(Long id);
+
+    void disablePerson(Long id);
 }

@@ -9,7 +9,18 @@ import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -24,9 +35,11 @@ public class PersonServiceImpl implements PersonService {
 
     private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName());
     private final PersonRepository personRepository;
+    private PagedResourcesAssembler<PersonDTO> assembler;
 
-    public PersonServiceImpl(PersonRepository personRepository) {
+    public PersonServiceImpl(PersonRepository personRepository, PagedResourcesAssembler<PersonDTO> assembler) {
         this.personRepository = personRepository;
+        this.assembler = assembler;
     }
 
     @Override
@@ -38,11 +51,25 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonDTO> findAll(){
+    public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable){
         logger.info("Find all people");
-        List<PersonDTO> people = ObjectMapper.parseListObject(personRepository.findAll(), PersonDTO.class);
-        people.forEach(this::addHateoasLink);
-        return people;
+        Page<Person> people = personRepository.findAll(pageable);
+        Page<PersonDTO> peopleDTO = people.map(person -> {
+            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            return ObjectMapper.parseObject(person, PersonDTO.class);
+        });
+        return assembler.toModel(peopleDTO, createLinkHAL(pageable));
+    }
+
+    @Override
+    public PagedModel<EntityModel<PersonDTO>> findPersonByName(String name, Pageable pageable) {
+        logger.info("Find people by name");
+        Page<Person> people = personRepository.findPeopleByName(name, pageable);
+        Page<PersonDTO> peopleDTO = people.map(person -> {
+            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            return ObjectMapper.parseObject(person, PersonDTO.class);
+        });
+        return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
 
     @Override
@@ -69,11 +96,26 @@ public class PersonServiceImpl implements PersonService {
         personRepository.delete(entity);
     }
 
+    @Transactional
+    @Override
+    public void disablePerson(Long id) {
+        personRepository.disabledPerson(id);
+    }
+
     private PersonDTO addHateoasLink(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll(null, null, "ASC")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).udpate(dto)).withRel("update").withType("PUT"));
         return dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
+
+    private Link createLinkHAL(Pageable pageable) {
+        return WebMvcLinkBuilder
+                .linkTo(WebMvcLinkBuilder
+                        .methodOn(PersonController.class)
+                        .findAll(pageable.getPageNumber(), pageable.getPageSize(), String.valueOf(pageable.getSort())))
+                .withSelfRel();
+    }
+
 }

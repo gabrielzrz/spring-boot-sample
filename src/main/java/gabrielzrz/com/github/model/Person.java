@@ -53,6 +53,9 @@ public class Person implements Serializable {
     @Column(name = "birth_day")
     private LocalDate birthDay;
 
+    @Column(name = "enabled")
+    private Boolean enabled = Boolean.TRUE;
+
     //Methods
     public Person() {
     }
@@ -121,6 +124,14 @@ public class Person implements Serializable {
 
     public void setBirthDay(LocalDate birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     //Equals && HashCode
