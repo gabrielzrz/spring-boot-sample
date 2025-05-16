@@ -16,13 +16,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -96,8 +91,8 @@ public class PersonServiceImpl implements PersonService {
         personRepository.delete(entity);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void disablePerson(Long id) {
         personRepository.disabledPerson(id);
     }
@@ -113,9 +108,8 @@ public class PersonServiceImpl implements PersonService {
     private Link createLinkHAL(Pageable pageable) {
         return WebMvcLinkBuilder
                 .linkTo(WebMvcLinkBuilder
-                        .methodOn(PersonController.class)
-                        .findAll(pageable.getPageNumber(), pageable.getPageSize(), String.valueOf(pageable.getSort())))
+                .methodOn(PersonController.class)
+                .findAll(pageable.getPageNumber(), pageable.getPageSize(), String.valueOf(pageable.getSort())))
                 .withSelfRel();
     }
-
 }
