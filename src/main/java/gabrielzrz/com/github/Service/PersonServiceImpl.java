@@ -28,7 +28,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName());
+    private Logger logger = LoggerFactory.getLogger(getClass().getName());
     private final PersonRepository personRepository;
     private PagedResourcesAssembler<PersonDTO> assembler;
 
