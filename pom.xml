@@ -55,6 +55,11 @@
 			<artifactId>java-jwt</artifactId>
 			<version>${java-jwt.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<!--Postgresql-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
