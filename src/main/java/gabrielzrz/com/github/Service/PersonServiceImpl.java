@@ -50,8 +50,8 @@ public class PersonServiceImpl implements PersonService {
         logger.info("Find all people");
         Page<Person> people = personRepository.findAll(pageable);
         Page<PersonDTO> peopleDTO = people.map(person -> {
-            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
-            return ObjectMapper.parseObject(person, PersonDTO.class);
+            return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            //return ObjectMapper.parseObject(person, PersonDTO.class);
         });
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
@@ -61,8 +61,8 @@ public class PersonServiceImpl implements PersonService {
         logger.info("Find people by name");
         Page<Person> people = personRepository.findPeopleByName(name, pageable);
         Page<PersonDTO> peopleDTO = people.map(person -> {
-            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
-            return ObjectMapper.parseObject(person, PersonDTO.class);
+            return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            //return ObjectMapper.parseObject(person, PersonDTO.class);
         });
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
