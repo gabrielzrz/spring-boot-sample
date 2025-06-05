@@ -23,7 +23,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String address;
     @JsonProperty("gender")
     private String gender;
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonProperty("birthDay")
     private LocalDate birthDay;
 

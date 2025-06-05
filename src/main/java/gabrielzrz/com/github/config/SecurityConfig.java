@@ -1,7 +1,7 @@
 package gabrielzrz.com.github.config;
 
-import gabrielzrz.com.github.Service.jwt.JwtTokenFilter;
-import gabrielzrz.com.github.Service.jwt.JwtTokenProvider;
+import gabrielzrz.com.github.security.JwtTokenFilter;
+import gabrielzrz.com.github.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -20,6 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Zorzi
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -45,18 +47,29 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
-        return httpSecurity
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JwtTokenFilter filter = new JwtTokenFilter(jwtTokenProvider);
+        return http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(
-                        "/zorzi/auth/signin", "/zorzi/auth/refresh/**", "/zorzi/auth/createUser", "/zorzi/swagger-ui/**", "/zorzi/v3/api-docs/").permitAll()
-                        .requestMatchers("/zorzi/api/**").authenticated().requestMatchers("/zorzi/users").denyAll())
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(
+                        authorizeHttpRequests -> authorizeHttpRequests
+                                .requestMatchers(
+                                        "/auth/signin",
+                                        "/auth/refresh/**",
+                                        "/auth/createUser",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
+                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/users").denyAll()
+                )
                 .cors(cors -> {})
                 .build();
     }
-
 }

@@ -1,5 +1,7 @@
 package gabrielzrz.com.github.dto.security;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,7 +17,9 @@ public class TokenDTO implements Serializable {
 
     private String userName;
     private Boolean authenticated;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime created;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expiration;
     private String accessToken;
     private String refreshToken;

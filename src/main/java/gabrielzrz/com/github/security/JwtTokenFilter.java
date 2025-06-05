@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.Service.jwt;
+package gabrielzrz.com.github.security;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.*;
@@ -8,6 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 
+/**
+ * @author Zorzi
+ */
 public class JwtTokenFilter extends GenericFilter {
 
     private JwtTokenProvider jwtTokenProvider;
@@ -18,7 +21,7 @@ public class JwtTokenFilter extends GenericFilter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        var token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
+        String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
         if (StringUtils.isNotBlank(token) && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
             if (auth != null) {
@@ -28,3 +31,6 @@ public class JwtTokenFilter extends GenericFilter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
+
+
+
