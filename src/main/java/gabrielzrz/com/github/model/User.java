@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.model;
 
+import gabrielzrz.com.github.model.base.BaseEntityVersioned;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,23 +21,11 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Audited
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
-public class User implements UserDetails, Serializable {
+public class User extends BaseEntityVersioned implements UserDetails, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1862608762850424266L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt;
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
 
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
@@ -65,11 +54,6 @@ public class User implements UserDetails, Serializable {
 
     //Methods
     public User() {
-    }
-
-    @PreUpdate
-    public void setUpdatedAt() {
-        this.updatedAt = Instant.now();
     }
 
     public List<String> getRoles() {
@@ -112,30 +96,6 @@ public class User implements UserDetails, Serializable {
     }
 
     //Getters && Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public String getUserName() {
         return userName;
     }

@@ -14,6 +14,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 
+/**
+ * @author Zorzi
+ */
 @Configuration
 public class JacksonConfig {
 

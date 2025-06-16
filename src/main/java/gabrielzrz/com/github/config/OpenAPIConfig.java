@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.*;
 
+/**
+ * @author Zorzi
+ */
 @Configuration
 public class OpenAPIConfig {
 
