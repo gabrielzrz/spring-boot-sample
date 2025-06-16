@@ -1,1 +1,1 @@
-# Projeto em spring boot + VueJs
+# Projeto em spring boot
