@@ -9,6 +9,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 @Relation(collectionRelation = "people")
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
@@ -16,7 +17,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     @Serial
     private static final long serialVersionUID = -886655505965555061L;
 
-    private Long id;
+    private UUID id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("address")
@@ -28,11 +29,11 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private LocalDate birthDay;
 
     //Getters && Setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

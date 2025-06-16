@@ -19,6 +19,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -38,11 +40,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDTO findById(Long id){
+    public PersonDTO findById(UUID id){
         logger.info("Find person by ID");
         var entity = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
-        var personDto = ObjectMapper.parseObject(entity, PersonDTO.class);
-        return addHateoasLink(personDto);
+        return ObjectMapper.parseObject(entity, PersonDTO.class);
+        //return addHateoasLink(personDto);
     }
 
     @Override
@@ -50,8 +52,8 @@ public class PersonServiceImpl implements PersonService {
         logger.info("Find all people");
         Page<Person> people = personRepository.findAll(pageable);
         Page<PersonDTO> peopleDTO = people.map(person -> {
-            return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
-            //return ObjectMapper.parseObject(person, PersonDTO.class);
+            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            return ObjectMapper.parseObject(person, PersonDTO.class);
         });
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
@@ -61,8 +63,8 @@ public class PersonServiceImpl implements PersonService {
         logger.info("Find people by name");
         Page<Person> people = personRepository.findPeopleByName(name, pageable);
         Page<PersonDTO> peopleDTO = people.map(person -> {
-            return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
-            //return ObjectMapper.parseObject(person, PersonDTO.class);
+            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
+            return ObjectMapper.parseObject(person, PersonDTO.class);
         });
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
@@ -85,7 +87,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         logger.info("delete person");
         Person entity = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
         personRepository.delete(entity);
@@ -93,7 +95,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public void disablePerson(Long id) {
+    public void disablePerson(UUID id) {
         personRepository.disabledPerson(id);
     }
 

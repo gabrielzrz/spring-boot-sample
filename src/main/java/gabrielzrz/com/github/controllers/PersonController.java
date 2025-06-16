@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 /**
  * @author Zorzi
@@ -39,7 +41,7 @@ public class PersonController {
     //GET
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Operation(summary = "Find by ID")
-    public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<PersonDTO> findById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok().body(personService.findById(id));
     }
 
@@ -105,7 +107,7 @@ public class PersonController {
     //DELETE
     @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Operation(summary = "delete person")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         personService.delete(id);
         return ResponseEntity.noContent().build();
     }

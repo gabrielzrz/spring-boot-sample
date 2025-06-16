@@ -10,13 +10,11 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-@EnableJpaAuditing
 @SpringBootApplication
 public class Startup {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Startup.class, args);
-
 		//generateHaskedPassword();
 	}
 

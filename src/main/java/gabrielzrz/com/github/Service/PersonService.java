@@ -7,12 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 
+import java.util.UUID;
+
 /**
  * @author Zorzi
  */
 public interface PersonService {
 
-    PersonDTO findById(Long id);
+    PersonDTO findById(UUID id);
 
     PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable);
 
@@ -22,7 +24,7 @@ public interface PersonService {
 
     PersonDTO update(PersonDTO person);
 
-    void delete(Long id);
+    void delete(UUID id);
 
-    void disablePerson(Long id);
+    void disablePerson(UUID id);
 }
