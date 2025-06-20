@@ -1,7 +1,7 @@
 package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.PersonService;
-import gabrielzrz.com.github.dto.v1.PersonDTO;
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.model.Person;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -48,7 +48,6 @@ public class PersonController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Operation(summary = "Find all people",
             description = "Returns PersonDTO",
-            tags = {"People"},
             responses = {
                     @ApiResponse(
                             description = "Success",
@@ -89,7 +88,7 @@ public class PersonController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Operation(summary = "create person")
+    @Operation(summary = "Create Person")
     public ResponseEntity<Person> create(@RequestBody PersonDTO person) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(person));
     }
@@ -98,7 +97,7 @@ public class PersonController {
     @PutMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Operation(summary = "update person")
+    @Operation(summary = "Update Person")
     public ResponseEntity<Void> udpate(@Valid @RequestBody PersonDTO person) {
         personService.update(person);
         return ResponseEntity.noContent().build();

@@ -1,8 +1,7 @@
 package gabrielzrz.com.github.Service;
 
-import gabrielzrz.com.github.dto.v1.PersonDTO;
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.model.Person;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;

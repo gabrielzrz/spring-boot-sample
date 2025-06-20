@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.dto.v1;
+package gabrielzrz.com.github.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @author Zorzi
+ */
 @Relation(collectionRelation = "people")
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
 

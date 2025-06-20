@@ -2,6 +2,7 @@ package gabrielzrz.com.github.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -21,11 +22,17 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${cors.origin.Patterns:default}")
+    private String corsOriginPatterns = "";
+
     @Override
     public void addCorsMappings(CorsRegistry registry) { // Cors
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8081")
-                .allowedMethods("*");
+        var allowedOrigins = corsOriginPatterns.split(",");
+        registry.addMapping("/**") // Informo que as regras abaixo serão para todos os endpoint
+                .allowedOrigins("*") // Defino qual origem (frontend) pode acessar meus endpoints
+                .allowedMethods("*") // Defino que todos os verbos são permitidos. Exem: GET, POST, PUT, DELETE, PATCH, OPTIONS
+                .allowedHeaders("*") // Permite todos os cabeçalhos. Como: Authorization, Content-Type
+                .allowCredentials(false); // Define se a API permite credenciais cross-origin. Como: Cookies (JSESSIONID, sessões)
     }
 
     @Override

@@ -1,8 +1,7 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.controllers.PersonController;
-import gabrielzrz.com.github.controllers.TestLogController;
-import gabrielzrz.com.github.dto.v1.PersonDTO;
+import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
 import gabrielzrz.com.github.mapper.ObjectMapper;
 import gabrielzrz.com.github.model.Person;

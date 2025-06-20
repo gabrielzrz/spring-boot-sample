@@ -36,7 +36,6 @@ public class Permission extends BaseEntityVersioned implements GrantedAuthority,
     }
 
     //Getters && Setters
-
     public String getDescription() {
         return description;
     }
