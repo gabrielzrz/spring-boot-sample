@@ -1,9 +1,12 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.config.FileStorageConfig;
+import gabrielzrz.com.github.exception.FileNotFoundException;
 import gabrielzrz.com.github.exception.FileStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 /**
  * @author Zorzi
@@ -47,6 +51,18 @@ public class FileStorageServiceImpl implements FileStorageService {
         } catch (IOException ex) {
             logger.error("Could not store file " + fileName + ". Please try Again!", ex);
             throw new FileStorageException("Could not store file " + fileName + ". Please try Again!", ex);
+        }
+    }
+
+    @Override
+    public Resource loadFileAsResource(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize(); // define o local de armazenamento e o nome
+            Resource resource = new UrlResource(filePath.toUri());
+            return Optional.ofNullable(resource).filter(Resource::exists).orElseThrow(() -> new FileNotFoundException("File " + fileName + " not Found"));
+        } catch (Exception ex) {
+            logger.error("File " + fileName + " not Found", ex);
+            throw new FileNotFoundException("File " + fileName + " not Found", ex);
         }
     }
 
