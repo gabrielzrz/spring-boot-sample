@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Zorzi
+ */
 public class ObjectMapper {
 
     private static Mapper mapper = DozerBeanMapperBuilder.buildDefault();

@@ -1,5 +1,8 @@
 package gabrielzrz.com.github.util;
 
+/**
+ * @author Zorzi
+ */
 public final class Attribute {
 
     public static final String ID = "id";
