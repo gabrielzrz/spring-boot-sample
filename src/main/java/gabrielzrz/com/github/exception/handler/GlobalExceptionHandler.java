@@ -34,4 +34,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({RequiredObjectIsNullException.class, BadRequestException.class})
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
