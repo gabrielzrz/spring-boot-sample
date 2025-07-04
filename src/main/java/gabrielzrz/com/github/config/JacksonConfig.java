@@ -9,15 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
+
 /**
  * @author Zorzi
  */
 @Configuration
+//@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class JacksonConfig {
 
     @Bean
