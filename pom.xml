@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.6</version>
+		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>gabrielzrz.com.github</groupId>
@@ -20,7 +20,7 @@
 		<resource.dir>${basedir}/src/main/resources</resource.dir>
 		<javassist.version>3.30.2-GA</javassist.version>
 		<liquibase.version>4.27.0</liquibase.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.6</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.8.9</springdoc-openapi-starter-webmvc-ui.version>
 		<java-jwt.version>4.4.0</java-jwt.version>
 		<apache.poi.version>5.4.1</apache.poi.version>
 		<apache.commons.version>1.14.0</apache.commons.version>
@@ -44,9 +44,13 @@
 			<scope>test</scope>
 		</dependency>
 		<!--Hateoas-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.hateoas</groupId>-->
+<!--			<artifactId>spring-hateoas</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>org.springframework.hateoas</groupId>
-			<artifactId>spring-hateoas</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 		<!--Spring Security-->
 		<dependency>
