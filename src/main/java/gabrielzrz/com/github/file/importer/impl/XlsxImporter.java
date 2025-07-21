@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * @author Zorzi
  */
+@Component
 public class XlsxImporter implements FileImporter {
 
     @Override
@@ -38,7 +40,6 @@ public class XlsxImporter implements FileImporter {
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
             if (isRowValid(row)) {
-                PersonDTO person = new PersonDTO();
                 people.add(parseRowtoPersonDto(row));
             }
         }

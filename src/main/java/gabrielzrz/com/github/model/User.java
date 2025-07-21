@@ -96,10 +96,6 @@ public class User extends BaseEntityVersioned implements UserDetails, Serializab
     }
 
     //Getters && Setters
-    public String getUserName() {
-        return userName;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }

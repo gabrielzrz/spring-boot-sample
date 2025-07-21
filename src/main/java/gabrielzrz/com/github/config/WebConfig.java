@@ -22,18 +22,15 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${cors.origin.Patterns:default}")
-    private String corsOriginPatterns = "";
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) { // Cors
-        var allowedOrigins = corsOriginPatterns.split(",");
-        registry.addMapping("/**") // Informo que as regras abaixo serão para todos os endpoint
-                .allowedOrigins("*") // Defino qual origem (frontend) pode acessar meus endpoints
-                .allowedMethods("*") // Defino que todos os verbos são permitidos. Exem: GET, POST, PUT, DELETE, PATCH, OPTIONS
-                .allowedHeaders("*") // Permite todos os cabeçalhos. Como: Authorization, Content-Type
-                .allowCredentials(false); // Define se a API permite credenciais cross-origin. Como: Cookies (JSESSIONID, sessões)
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) { // Cors
+//        var allowedOrigins = corsOriginPatterns.split(",");
+//        registry.addMapping("/**") // Informo que as regras abaixo serão para todos os endpoint
+//                .allowedOrigins("*") // Defino qual origem (frontend) pode acessar meus endpoints
+//                .allowedMethods("*") // Defino que todos os verbos são permitidos. Exem: GET, POST, PUT, DELETE, PATCH, OPTIONS
+//                .allowedHeaders("*") // Permite todos os cabeçalhos. Como: Authorization, Content-Type
+//                .allowCredentials(false); // Define se a API permite credenciais cross-origin. Como: Cookies (JSESSIONID, sessões)
+//    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -45,11 +42,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .mediaType("xml", MediaType.APPLICATION_XML)
                 .mediaType("yml", MediaType.valueOf("application/x-yaml"));
     }
-
-//    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        configurer.addPathPrefix("/api", HandlerTypePredicate.forBasePackage("gabrielzrz.com.github.controllers"));
-//    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

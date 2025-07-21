@@ -20,9 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
-
 
 /**
  * @author Zorzi
@@ -91,6 +92,15 @@ public class PersonController {
     @Operation(summary = "Create Person")
     public ResponseEntity<Person> create(@RequestBody PersonDTO person) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(person));
+    }
+
+    @PostMapping(
+            value = "/massCreation",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Operation(summary = "Massive people creation with upload of XLSX or CSV")
+    public ResponseEntity<Void> massCreation(@RequestParam("file") MultipartFile file) {
+        personService.massCreation(file);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //PUT

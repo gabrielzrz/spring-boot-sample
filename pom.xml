@@ -23,7 +23,7 @@
 		<springdoc-openapi-starter-webmvc-ui.version>2.8.9</springdoc-openapi-starter-webmvc-ui.version>
 		<java-jwt.version>4.5.0</java-jwt.version>
 		<apache.poi.version>5.4.1</apache.poi.version>
-		<apache.commons.version>1.14.0</apache.commons.version>
+		<apache.commons.version>1.11.0</apache.commons.version>
 		<p6spy-spring-boot-starter.version>1.11.0</p6spy-spring-boot-starter.version>
 	</properties>
 	<dependencies>
@@ -44,10 +44,6 @@
 			<scope>test</scope>
 		</dependency>
 		<!--Hateoas-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.hateoas</groupId>-->
-<!--			<artifactId>spring-hateoas</artifactId>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>

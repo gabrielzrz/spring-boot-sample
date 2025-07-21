@@ -1,14 +1,18 @@
 package gabrielzrz.com.github.exception.handler;
 
 import gabrielzrz.com.github.exception.*;
+import gabrielzrz.com.github.model.User;
+import gabrielzrz.com.github.util.SecurityContextUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author Zorzi
@@ -16,28 +20,52 @@ import java.util.Date;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({Exception.class, FileStorageException.class})
-    public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        ex.printStackTrace();
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    private Logger logger = LoggerFactory.getLogger(getClass().getName());
+
+    @ExceptionHandler({Exception.class})
+    public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        logUnexpectedError(exception, url, httpStatus);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
     }
 
     @ExceptionHandler({ResourceNotFoundException.class, UserNameNotFoundException.class, FileNotFoundException.class})
-    public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        logUnexpectedError(exception, url, httpStatus);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
-    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationException(Exception ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationException(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        logUnexpectedError(exception, url, httpStatus);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
     }
 
     @ExceptionHandler({RequiredObjectIsNullException.class, BadRequestException.class})
-    public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        logUnexpectedError(exception, url, httpStatus);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    private void logUnexpectedError(Exception exception, String url, HttpStatus httpStatus) {
+        logger.error("Erro inesperado: {} | Path: {} | Status: {} | Usuário: {} | Exception: {} ",
+                exception.getMessage(),
+                url,
+                httpStatus.value(),
+                SecurityContextUtil.loggedusername(),
+                exception.getClass().getName(),
+                exception
+        );
     }
 }
