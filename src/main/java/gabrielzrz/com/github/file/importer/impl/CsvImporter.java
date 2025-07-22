@@ -20,6 +20,8 @@ import java.util.List;
 @Component
 public class CsvImporter implements FileImporter {
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     @Override
     public List<PersonDTO> importFile(InputStream inputStream) throws Exception {
         CSVFormat format = CSVFormat.DEFAULT
@@ -35,7 +37,6 @@ public class CsvImporter implements FileImporter {
 
     private List<PersonDTO> parseRecordsToPersonDTOs(Iterable<CSVRecord> records) {
         List<PersonDTO> people = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for (CSVRecord record : records) {
             PersonDTO person = new PersonDTO();
             person.setName(record.get("name"));

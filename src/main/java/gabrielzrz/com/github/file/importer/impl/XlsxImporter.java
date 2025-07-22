@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,8 @@ import java.util.List;
  */
 @Component
 public class XlsxImporter implements FileImporter {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
     public List<PersonDTO> importFile(InputStream inputStream) throws Exception {
@@ -32,7 +35,6 @@ public class XlsxImporter implements FileImporter {
             }
             return parseRowsToPersonDtoList(rowIterator);
         }
-
     }
 
     private List<PersonDTO> parseRowsToPersonDtoList(Iterator<Row> rowIterator) {
@@ -51,7 +53,7 @@ public class XlsxImporter implements FileImporter {
         person.setName(row.getCell(0).getStringCellValue());
         person.setAddress(row.getCell(1).getStringCellValue());
         person.setGender(row.getCell(2).getStringCellValue());
-        person.setBirthDay(LocalDate.parse(row.getCell(3).getStringCellValue()));
+        person.setBirthDay(LocalDate.parse(row.getCell(3).getStringCellValue(), formatter));
         return person;
     }
 

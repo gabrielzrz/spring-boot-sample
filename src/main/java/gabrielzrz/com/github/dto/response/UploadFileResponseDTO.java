@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.dto;
+package gabrielzrz.com.github.dto.response;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +12,7 @@ public class UploadFileResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = -7100768506364604220L;
 
+    // Variables
     private String fileName;
     private String fileDownloadUri;
     private String fileType;
@@ -28,7 +29,7 @@ public class UploadFileResponseDTO implements Serializable {
     public UploadFileResponseDTO() {
     }
 
-    //Getters && Setters
+    // Getters && Setters
     public String getFileName() {
         return fileName;
     }

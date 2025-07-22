@@ -1,7 +1,7 @@
 package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.FileStorageService;
-import gabrielzrz.com.github.dto.UploadFileResponseDTO;
+import gabrielzrz.com.github.dto.response.UploadFileResponseDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
