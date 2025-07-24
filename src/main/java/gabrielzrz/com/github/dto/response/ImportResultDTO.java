@@ -28,6 +28,8 @@ public class ImportResultDTO implements Serializable {
     private String fileName; // Nome do arquivo
     private String fileType; // Tipo da extensão
     private long fileSizeInBytes; // Tamanho do arquivo
+    private int totalColumns;
+    private List<String> columnHeaders;
 
     // Tempo de processamento
     private long processingTimeInMillis; // Tempo de processamento
@@ -213,5 +215,21 @@ public class ImportResultDTO implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getTotalColumns() {
+        return totalColumns;
+    }
+
+    public void setTotalColumns(int totalColumns) {
+        this.totalColumns = totalColumns;
+    }
+
+    public List<String> getColumnHeaders() {
+        return columnHeaders;
+    }
+
+    public void setColumnHeaders(List<String> columnHeaders) {
+        this.columnHeaders = columnHeaders;
     }
 }

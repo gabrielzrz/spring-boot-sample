@@ -2,6 +2,8 @@ package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.controllers.PersonController;
 import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.response.ImportResultDTO;
+import gabrielzrz.com.github.enums.ImportStatus;
 import gabrielzrz.com.github.exception.BadRequestException;
 import gabrielzrz.com.github.exception.FileStorageException;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
@@ -24,9 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
-import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -110,24 +111,33 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Transactional
-    public void massCreation(MultipartFile file) {
+    public ImportResultDTO massCreation(MultipartFile file) {
         logger.info("Importing People from file!");
         if (file.isEmpty()) {
             throw new BadRequestException("Please set a Valid File!");
         }
+        ImportResultDTO result = new ImportResultDTO();
+        result.setImportStartTime(LocalDateTime.now());
         try {
             try (InputStream inputStream = file.getInputStream()) {
                 String filename = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(() -> new BadRequestException("File name cannot be null"));
                 FileImporter fileImporter = fileImporterFactory.getImporter(filename);
-                List<PersonDTO> peopleDTO = fileImporter.importFile(inputStream);
+                result.setFileName(filename);
+                List<PersonDTO> peopleDTO = fileImporter.importFile(inputStream, result);
                 List<Person> people = LambdaUtil.mapTo(peopleDTO, dto -> ObjectMapper.parseObject(dto, Person.class));
                 for (Person person : people) {
                     personRepository.save(person);
+                    result.incrementSuccessful();
                 }
+                result.setMessage("Importação concluída com sucesso");
             }
         } catch (Exception exception) {
-            throw new FileStorageException("Error processing the file!");
+            result.setStatus(ImportStatus.FAILED);
+            result.setMessage("Falha na importação: " + exception.getMessage());
+        } finally {
+            result.finishImport(); // Calcula tempo total e define status final
         }
+        return result;
     }
 
     @Override

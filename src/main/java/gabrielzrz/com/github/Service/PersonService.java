@@ -1,6 +1,7 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.model.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -29,5 +30,5 @@ public interface PersonService {
 
     PersonDTO disablePerson(UUID id);
 
-    void massCreation(MultipartFile file);
+    ImportResultDTO massCreation(MultipartFile file);
 }

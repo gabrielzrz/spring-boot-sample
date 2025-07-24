@@ -1,6 +1,7 @@
 package gabrielzrz.com.github.file.importer.impl;
 
 import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.file.importer.contract.FileImporter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.ss.usermodel.CellType;
@@ -9,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +27,7 @@ public class XlsxImporter implements FileImporter {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
-    public List<PersonDTO> importFile(InputStream inputStream) throws Exception {
+    public List<PersonDTO> importFile(InputStream inputStream, ImportResultDTO result)  {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -34,6 +36,8 @@ public class XlsxImporter implements FileImporter {
                 rowIterator.next();
             }
             return parseRowsToPersonDtoList(rowIterator);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
