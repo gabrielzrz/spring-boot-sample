@@ -1,6 +1,6 @@
 package gabrielzrz.com.github.controllers;
 
-import gabrielzrz.com.github.Service.PersonService;
+import gabrielzrz.com.github.Service.contract.PersonService;
 import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.enums.ImportStatus;

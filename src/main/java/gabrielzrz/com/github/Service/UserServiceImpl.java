@@ -1,6 +1,6 @@
 package gabrielzrz.com.github.Service;
 
-import gabrielzrz.com.github.exception.UserNameNotFoundException;
+import gabrielzrz.com.github.Service.contract.UserService;
 import gabrielzrz.com.github.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

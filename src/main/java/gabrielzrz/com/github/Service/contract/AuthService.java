@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.Service;
+package gabrielzrz.com.github.Service.contract;
 
 import gabrielzrz.com.github.dto.security.AccountCredentialsDTO;
 import gabrielzrz.com.github.dto.security.TokenDTO;

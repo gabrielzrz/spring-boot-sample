@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.Service.contract.AuthService;
 import gabrielzrz.com.github.exception.RequiredObjectIsNullException;
 import gabrielzrz.com.github.security.JwtTokenProvider;
 import gabrielzrz.com.github.dto.security.AccountCredentialsDTO;

@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.Service;
+package gabrielzrz.com.github.Service.contract;
 
 import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
@@ -8,7 +8,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 /**person

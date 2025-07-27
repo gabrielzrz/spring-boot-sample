@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.Service.contract.FileImportService;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.enums.ImportStatus;
 import gabrielzrz.com.github.exception.BadRequestException;
@@ -18,7 +19,7 @@ import java.util.Optional;
  * @author Zorzi
  */
 @Service
-public class FileImportServiceImpl implements FileImportService{
+public class FileImportServiceImpl implements FileImportService {
 
     private final FileImporterFactory fileImporterFactory;
 

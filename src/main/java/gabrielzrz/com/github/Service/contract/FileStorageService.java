@@ -1,6 +1,5 @@
-package gabrielzrz.com.github.Service;
+package gabrielzrz.com.github.Service.contract;
 
-import gabrielzrz.com.github.config.FileStorageConfig;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

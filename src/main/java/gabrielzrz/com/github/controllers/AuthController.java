@@ -1,6 +1,6 @@
 package gabrielzrz.com.github.controllers;
 
-import gabrielzrz.com.github.Service.AuthService;
+import gabrielzrz.com.github.Service.contract.AuthService;
 import gabrielzrz.com.github.dto.security.AccountCredentialsDTO;
 import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;

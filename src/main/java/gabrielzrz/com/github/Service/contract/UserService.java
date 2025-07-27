@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.Service;
+package gabrielzrz.com.github.Service.contract;
 
 /**
  * @author Zorzi

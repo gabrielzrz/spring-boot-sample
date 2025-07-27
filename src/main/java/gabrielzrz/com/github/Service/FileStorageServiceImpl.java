@@ -1,5 +1,6 @@
 package gabrielzrz.com.github.Service;
 
+import gabrielzrz.com.github.Service.contract.FileStorageService;
 import gabrielzrz.com.github.config.FileStorageConfig;
 import gabrielzrz.com.github.exception.FileNotFoundException;
 import gabrielzrz.com.github.exception.FileStorageException;
