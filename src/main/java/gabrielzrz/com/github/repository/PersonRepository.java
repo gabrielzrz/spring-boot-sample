@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 public interface PersonRepository extends JpaRepository<Person, UUID> {
 
     @Modifying(clearAutomatically = true)
+    @Transactional
     @Query("UPDATE Person p SET p.enabled = FALSE WHERE p.id = :id")
     void disabledPerson(@Param("id") UUID id);
 

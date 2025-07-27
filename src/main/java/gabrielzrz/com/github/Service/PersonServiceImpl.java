@@ -2,19 +2,18 @@ package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.controllers.PersonController;
 import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.response.ImportErrorDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
-import gabrielzrz.com.github.enums.ImportStatus;
-import gabrielzrz.com.github.exception.BadRequestException;
-import gabrielzrz.com.github.exception.FileStorageException;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
-import gabrielzrz.com.github.file.importer.contract.FileImporter;
-import gabrielzrz.com.github.file.importer.factory.FileImporterFactory;
 import gabrielzrz.com.github.mapper.ObjectMapper;
 import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.repository.PersonRepository;
+import gabrielzrz.com.github.util.ExceptionMessageParser;
 import gabrielzrz.com.github.util.LambdaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -23,13 +22,9 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static gabrielzrz.com.github.mapper.ObjectMapper.parseObject;
@@ -43,17 +38,21 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class PersonServiceImpl implements PersonService {
 
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
+
     private final PersonRepository personRepository;
-    private final FileImporterFactory fileImporterFactory;
     private final PagedResourcesAssembler<PersonDTO> assembler;
+    private final ExceptionMessageParser exceptionMessageParser;
+    private final FileImportService fileImportService;
 
     public PersonServiceImpl(
             PersonRepository personRepository,
             PagedResourcesAssembler<PersonDTO> assembler,
-            FileImporterFactory fileImporterFactory) {
+            ExceptionMessageParser exceptionMessageParser,
+            FileImportService fileImportService) {
         this.personRepository = personRepository;
         this.assembler = assembler;
-        this.fileImporterFactory = fileImporterFactory;
+        this.exceptionMessageParser = exceptionMessageParser;
+        this.fileImportService = fileImportService;
     }
 
     @Override
@@ -110,44 +109,51 @@ public class PersonServiceImpl implements PersonService {
         personRepository.delete(entity);
     }
 
-    @Transactional
+    @Override
     public ImportResultDTO massCreation(MultipartFile file) {
-        logger.info("Importing People from file!");
-        if (file.isEmpty()) {
-            throw new BadRequestException("Please set a Valid File!");
-        }
-        ImportResultDTO result = new ImportResultDTO();
-        result.setImportStartTime(LocalDateTime.now());
-        try {
-            try (InputStream inputStream = file.getInputStream()) {
-                String filename = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(() -> new BadRequestException("File name cannot be null"));
-                FileImporter fileImporter = fileImporterFactory.getImporter(filename);
-                result.setFileName(filename);
-                List<PersonDTO> peopleDTO = fileImporter.importFile(inputStream, result);
-                List<Person> people = LambdaUtil.mapTo(peopleDTO, dto -> ObjectMapper.parseObject(dto, Person.class));
-                for (Person person : people) {
-                    personRepository.save(person);
-                    result.incrementSuccessful();
-                }
-                result.setMessage("Importação concluída com sucesso");
-            }
-        } catch (Exception exception) {
-            result.setStatus(ImportStatus.FAILED);
-            result.setMessage("Falha na importação: " + exception.getMessage());
-        } finally {
-            result.finishImport(); // Calcula tempo total e define status final
-        }
-        return result;
+        return fileImportService.importFile(file, PersonDTO.class, this::saveImportedPeople);
     }
 
     @Override
-    @Transactional
     public PersonDTO disablePerson(UUID id) {
         logger.info("Disabling one Person!");
         Person person = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         personRepository.disabledPerson(id);
         PersonDTO dto = parseObject(person, PersonDTO.class);
         return addHateoasLink(dto);
+    }
+
+    private void saveImportedPeople(List<PersonDTO> items, ImportResultDTO result) {
+        List<Person> people = LambdaUtil.mapTo(items, dto -> ObjectMapper.parseObject(dto, Person.class));
+        for (Person person : people) {
+            try {
+                personRepository.save(person);
+                result.incrementSuccessful();
+            } catch (DataIntegrityViolationException e) {
+                // Violação de integridade (chave duplicada, FK, etc.)
+                result.incrementFailed();
+                String errorMessage = exceptionMessageParser.parseDataIntegrityError(e);
+                result.addError(new ImportErrorDTO(errorMessage, person.getName()));
+            } catch (jakarta.validation.ConstraintViolationException e) {
+                // Violação de validação Bean Validation (@NotNull, @Size, etc.)
+                result.incrementFailed();
+                String errorMessage = exceptionMessageParser.parseValidationErrors(e.getConstraintViolations());
+                result.addError(new ImportErrorDTO(errorMessage, person.getName()));
+            } catch (org.hibernate.exception.ConstraintViolationException e) {
+                // Violação de constraint do banco (Hibernate)
+                result.incrementFailed();
+                String errorMessage = "Violação de constraint: " + e.getConstraintName();
+                result.addError(new ImportErrorDTO(errorMessage, person.getName()));
+            } catch (DataAccessException e) {
+                // Exceções gerais de acesso a dados (Spring)
+                result.incrementFailed();
+                String errorMessage = "Erro de acesso aos dados: " + e.getMostSpecificCause().getMessage();
+                result.addError(new ImportErrorDTO(errorMessage, person.getName()));
+            } catch (Exception e) {
+                result.incrementFailed();
+                result.addError(new ImportErrorDTO("Erro inesperado: " + e.getMessage(), person.getName()));
+            }
+        }
     }
 
     private PersonDTO addHateoasLink(PersonDTO dto) {

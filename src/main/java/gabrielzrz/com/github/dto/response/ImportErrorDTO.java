@@ -12,19 +12,29 @@ public class ImportErrorDTO implements Serializable {
     private static final long serialVersionUID = -1534963535408916274L;
 
     // Variables
-    private int rowNumber;
-    private String field;
-    private String errorMessage;
-    private String rejectedValue;
+    private String exception;
+
+    // Erros para ler os arquivos
+    private Integer rowNumber; // linha do arquivo que deu erro
+    private String field; // qual é a coluna
+    private String rejectedValue; // valor da celula
+
+    // Erros para quando for salvar
+    private String errorSave; // Adicionar alguma informação que consiga ler o save que deu problema
 
     // Methods
     public ImportErrorDTO() {
     }
 
-    public ImportErrorDTO(int rowNumber, String field, String errorMessage, String rejectedValue) {
+    public ImportErrorDTO(String exception, String errorSave) {
+        this.exception = exception;
+        this.errorSave = errorSave;
+    }
+
+    public ImportErrorDTO(Integer rowNumber, String field, String exception, String rejectedValue) {
         this.rowNumber = rowNumber;
         this.field = field;
-        this.errorMessage = errorMessage;
+        this.exception = exception;
         this.rejectedValue = rejectedValue;
     }
 
@@ -33,7 +43,7 @@ public class ImportErrorDTO implements Serializable {
         return rowNumber;
     }
 
-    public void setRowNumber(int rowNumber) {
+    public void setRowNumber(Integer rowNumber) {
         this.rowNumber = rowNumber;
     }
 
@@ -45,12 +55,20 @@ public class ImportErrorDTO implements Serializable {
         this.field = field;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getException() {
+        return exception;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setException(String exception) {
+        this.exception = exception;
+    }
+
+    public String getErrorSave() {
+        return errorSave;
+    }
+
+    public void setErrorSave(String errorSave) {
+        this.errorSave = errorSave;
     }
 
     public String getRejectedValue() {

@@ -2,6 +2,8 @@ package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.PersonService;
 import gabrielzrz.com.github.dto.PersonDTO;
+import gabrielzrz.com.github.dto.response.ImportResultDTO;
+import gabrielzrz.com.github.enums.ImportStatus;
 import gabrielzrz.com.github.model.Person;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -22,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -98,9 +99,18 @@ public class PersonController {
             value = "/massCreation",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Operation(summary = "Massive people creation with upload of XLSX or CSV")
-    public ResponseEntity<Void> massCreation(@RequestParam("file") MultipartFile file) {
-        personService.massCreation(file);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ImportResultDTO> massCreation(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            ImportResultDTO errorResult = createErrorResult("Arquivo vazio");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResult);
+        }
+        if (!isValidFileType(file)) {
+            ImportResultDTO errorResult = createErrorResult("Tipo de arquivo inválido. Use CSV ou XLSX");
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(errorResult);
+        }
+        ImportResultDTO result = personService.massCreation(file);
+        HttpStatus status = determineHttpStatus(result);
+        return ResponseEntity.status(status).body(result);
     }
 
     //PUT
@@ -119,5 +129,34 @@ public class PersonController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         personService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private HttpStatus determineHttpStatus(ImportResultDTO result) {
+        switch (result.getStatus()) {
+            case SUCCESS:
+                return HttpStatus.CREATED; // 201
+            case PARTIAL_SUCCESS:
+                // Alguns registros foram importados, outros falharam
+                return HttpStatus.PARTIAL_CONTENT; // 206
+            case FAILED:
+                // Nenhum registro foi importado ou erro crítico
+                return HttpStatus.UNPROCESSABLE_ENTITY; // 422
+            default:
+                return HttpStatus.INTERNAL_SERVER_ERROR; // 500
+        }
+    }
+
+    private ImportResultDTO createErrorResult(String message) {
+        ImportResultDTO result = new ImportResultDTO();
+        result.setStatus(ImportStatus.FAILED);
+        result.setMessage(message);
+        result.finishImport();
+        return result;
+    }
+
+    private boolean isValidFileType(MultipartFile file) {
+        String contentType = file.getContentType();
+        String filename = file.getOriginalFilename();
+        return filename != null && (filename.endsWith(".csv") || filename.endsWith(".xlsx"));
     }
 }

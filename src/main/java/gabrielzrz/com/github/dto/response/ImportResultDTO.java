@@ -1,9 +1,12 @@
 package gabrielzrz.com.github.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import gabrielzrz.com.github.enums.ImportStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,27 +21,29 @@ public class ImportResultDTO implements Serializable {
     private static final long serialVersionUID = 5354588503844459530L;
 
     // Contadores principais
-    private int totalRecordsProcessed; // Total de registros processados
-    private int successfulImports; // Importações bem-sucedidas
-    private int failedImports; // Importações que falharam
+    private int totalRowsProcessed; // Total de registros (linhas) do arquivo
+    private int successfulImports; // Importações que foram criadas no banco
+    private int failedImports; // Importações que falharam tanto na leitura do arquivo quanto no Save
     private int duplicatesSkipped; // Duplicatas ignoradas
-    private int emptyRowsIgnored; // Linhas vazias ignoradas
+    private BigDecimal sucessRate; // Taxa de sucesso
 
     // Informações do arquivo
     private String fileName; // Nome do arquivo
     private String fileType; // Tipo da extensão
     private long fileSizeInBytes; // Tamanho do arquivo
-    private int totalColumns;
-    private List<String> columnHeaders;
+    private int totalColumns; // quantidade de colunas
+    private List<String> columnHeaders; // quais as colunas do arquivo importado
 
     // Tempo de processamento
     private long processingTimeInMillis; // Tempo de processamento
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime importStartTime; // Horário de início
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime importEndTime; // Horário de fim
 
     // Detalhes dos erros
-    private List<ImportErrorDTO> errors;
-    private List<String> warnings;
+    private List<ImportErrorDTO> errors; // Lista de erros que ocorreram
+    private List<String> warnings; // Posso usar se a importação já tem um registro importado
 
     // Status geral
     private ImportStatus status;
@@ -64,10 +69,6 @@ public class ImportResultDTO implements Serializable {
         this.duplicatesSkipped++;
     }
 
-    public void incrementEmptyRows() {
-        this.emptyRowsIgnored++;
-    }
-
     public void addError(ImportErrorDTO error) {
         this.errors.add(error);
     }
@@ -79,9 +80,20 @@ public class ImportResultDTO implements Serializable {
     public void finishImport() {
         this.importEndTime = LocalDateTime.now();
         this.processingTimeInMillis = Duration.between(importStartTime, importEndTime).toMillis();
+        calculateSuccessRate();
+        chooseStatus();
+    }
 
+    public void calculateSuccessRate() {
+        // Calcula taxa de sucesso
+        sucessRate = new BigDecimal(successfulImports)
+                .divide(new BigDecimal(totalRowsProcessed == 0 ? 1 : totalRowsProcessed), 2, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100));
+    }
+
+    public void chooseStatus() {
         // Define status baseado nos resultados
-        if (failedImports == 0 && errors.isEmpty()) {
+        if (failedImports == 0 && errors != null && errors.isEmpty()) {
             this.status = ImportStatus.SUCCESS;
         } else if (successfulImports > 0) {
             this.status = ImportStatus.PARTIAL_SUCCESS;
@@ -90,19 +102,13 @@ public class ImportResultDTO implements Serializable {
         }
     }
 
-    // Calcula taxa de sucesso
-    public double getSuccessRate() {
-        if (totalRecordsProcessed == 0) return 0.0;
-        return (double) successfulImports / totalRecordsProcessed * 100;
-    }
-
     // Getters && Setters
-    public int getTotalRecordsProcessed() {
-        return totalRecordsProcessed;
+    public int getTotalRowsProcessed() {
+        return totalRowsProcessed;
     }
 
-    public void setTotalRecordsProcessed(int totalRecordsProcessed) {
-        this.totalRecordsProcessed = totalRecordsProcessed;
+    public void setTotalRowsProcessed(int totalRowsProcessed) {
+        this.totalRowsProcessed = totalRowsProcessed;
     }
 
     public int getSuccessfulImports() {
@@ -129,20 +135,20 @@ public class ImportResultDTO implements Serializable {
         this.duplicatesSkipped = duplicatesSkipped;
     }
 
-    public int getEmptyRowsIgnored() {
-        return emptyRowsIgnored;
-    }
-
-    public void setEmptyRowsIgnored(int emptyRowsIgnored) {
-        this.emptyRowsIgnored = emptyRowsIgnored;
-    }
-
     public String getFileName() {
         return fileName;
     }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public BigDecimal getSucessRate() {
+        return sucessRate;
+    }
+
+    public void setSucessRate(BigDecimal sucessRate) {
+        this.sucessRate = sucessRate;
     }
 
     public String getFileType() {

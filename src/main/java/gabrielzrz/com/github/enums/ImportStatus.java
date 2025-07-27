@@ -5,9 +5,9 @@ package gabrielzrz.com.github.enums;
  */
 public enum ImportStatus {
 
-    SUCCESS("Success"),
-    PARTIAL_SUCCESS("Partial Sucess"),
-    FAILED("Failed");
+    SUCCESS("Importação concluída com sucesso"),
+    PARTIAL_SUCCESS("Importação concluída parcialmente"),
+    FAILED("Importação falhou");
 
     // Constructor
     ImportStatus(String description) {

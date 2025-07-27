@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.file.importer.contract;
+package gabrielzrz.com.github.importer.contract;
 
 import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Zorzi
  */
-public interface FileImporter {
+public interface FileImporter<T> {
 
-    List<PersonDTO> importFile(InputStream inputStream, ImportResultDTO result);
+    List<T> importFile(InputStream inputStream, ImportResultDTO result);
 }
