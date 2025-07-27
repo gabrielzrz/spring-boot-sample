@@ -37,13 +37,7 @@ public class PersonCSVImporter extends BaseCSVImporter<PersonDTO> {
                 ));
                 return null;
             }
-
-            PersonDTO person = new PersonDTO();
-            person.setName(record.get("name"));
-            person.setAddress(record.get("address"));
-            person.setGender(record.get("gender"));
-            person.setBirthDay(LocalDate.parse(record.get("birthDay"), formatter));
-            return person;
+            return createPersonDTO(record);
         } catch (DateTimeParseException e) {
             result.incrementFailed();
             result.addError(new ImportErrorDTO(
@@ -95,5 +89,14 @@ public class PersonCSVImporter extends BaseCSVImporter<PersonDTO> {
             errors.add("Data de nascimento é obrigatória");
         }
         return errors;
+    }
+
+    private PersonDTO createPersonDTO(CSVRecord record) {
+        PersonDTO person = new PersonDTO();
+        person.setName(record.get("name"));
+        person.setAddress(record.get("address"));
+        person.setGender(record.get("gender"));
+        person.setBirthDay(LocalDate.parse(record.get("birthDay"), formatter));
+        return person;
     }
 }

@@ -1,7 +1,6 @@
 package gabrielzrz.com.github.exception.handler;
 
 import gabrielzrz.com.github.exception.*;
-import gabrielzrz.com.github.model.User;
 import gabrielzrz.com.github.util.SecurityContextUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Optional;
 
 /**
  * @author Zorzi

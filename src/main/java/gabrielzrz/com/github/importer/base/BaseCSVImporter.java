@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Zorzi
@@ -45,9 +46,7 @@ public abstract class BaseCSVImporter<T> implements FileImporter<T> {
         List<T> items = new ArrayList<>();
         for (CSVRecord record : records) {
             T item = mapRecordToDTO(record, result);
-            if (item != null) {
-                items.add(item);
-            }
+            Optional.ofNullable(item).ifPresent(items::add);
         }
         return items;
     }

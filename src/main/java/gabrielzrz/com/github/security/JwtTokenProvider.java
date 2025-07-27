@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Zorzi
@@ -37,10 +38,10 @@ public class JwtTokenProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    @Value("${security.jwt.token.secret-key:secret}")
+    @Value("${security.jwt.token.secret-key}")
     private String secretyKey = "secret";
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000;
+
+    private long validityInMilliseconds = TimeUnit.HOURS.toMillis(24);
 
     Algorithm algorithm = null;
 

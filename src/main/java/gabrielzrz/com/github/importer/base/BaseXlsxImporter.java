@@ -1,8 +1,8 @@
 package gabrielzrz.com.github.importer.base;
 
-import gabrielzrz.com.github.dto.response.ImportErrorDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.importer.contract.FileImporter;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -10,7 +10,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,16 +20,15 @@ import java.util.Optional;
  */
 public abstract class BaseXlsxImporter<T> implements FileImporter<T> {
 
-    protected abstract T mapRowToDTO(Row row);
+    protected abstract T mapRowToDTO(Row row, ImportResultDTO result);
 
     @Override
     public List<T> importFile(InputStream inputStream, ImportResultDTO result) {
         try (XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
+            result.setTotalRowsProcessed(sheet.getPhysicalNumberOfRows() - 1);
             Iterator<Row> rowIterator = sheet.iterator();
-            if (rowIterator.hasNext()) {
-                rowIterator.next();
-            }
+            loadResult(rowIterator, result);
             return parseRowsToPersonDtoList(rowIterator, result);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -41,38 +39,28 @@ public abstract class BaseXlsxImporter<T> implements FileImporter<T> {
         List<T> items = new ArrayList<>();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
-            try {
-                if (isRowValid(row)) {
-                    T item = mapRowToDTO(row);
-                    Optional.ofNullable(item).ifPresent(items::add);
-                }
-            } catch (DateTimeParseException e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        row.getRowNum(),
-                        "birthDay",
-                        "Data inválida: " + e.getMessage(),
-                        row.getCell(3).getStringCellValue()
-                ));
-            } catch (IllegalArgumentException e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        row.getRowNum(),
-                        "general",
-                        "Campo não encontrado: " + e.getMessage(),
-                        ""
-                ));
-            } catch (Exception e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        row.getRowNum(),
-                        "general",
-                        "Erro inesperado: " + e.getMessage(),
-                        ""
-                ));
-            }
+//            if (isRowValid(row)) {
+                T item = mapRowToDTO(row, result);
+                Optional.ofNullable(item).ifPresent(items::add);
+//            }
         }
         return items;
+    }
+
+    private void loadResult(Iterator<Row> rowIterator, ImportResultDTO result) {
+        result.setFileType("xlsx");
+        if (rowIterator.hasNext()) {
+            Row header = rowIterator.next(); // Pega e descarta o header
+            int quantidadeColunas = header.getLastCellNum();
+            List<String> headers = new ArrayList<>();
+            for (int i = 0; i < quantidadeColunas; i++) {
+                Cell cell = header.getCell(i);
+                String headerName = cell != null ? cell.toString().trim() : "";
+                headers.add(headerName);
+            }
+            result.setColumnHeaders(headers);
+            result.setTotalColumns(quantidadeColunas);
+        }
     }
 
     private boolean isRowValid(Row row) {

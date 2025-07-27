@@ -2,6 +2,7 @@ package gabrielzrz.com.github.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import gabrielzrz.com.github.enums.ImportStatus;
+import gabrielzrz.com.github.util.ListUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +37,11 @@ public class ImportResultDTO implements Serializable {
     private List<String> columnHeaders; // quais as colunas do arquivo importado
 
     // Tempo de processamento
-    private long processingTimeInMillis; // Tempo de processamento
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
+    private LocalTime processingTimeInMillis; // Tempo de processamento
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime importStartTime; // Horário de início
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime importEndTime; // Horário de fim
 
     // Detalhes dos erros
@@ -79,9 +82,13 @@ public class ImportResultDTO implements Serializable {
 
     public void finishImport() {
         this.importEndTime = LocalDateTime.now();
-        this.processingTimeInMillis = Duration.between(importStartTime, importEndTime).toMillis();
+        long durationInMillis = Duration.between(importStartTime, importEndTime).toMillis();
+        this.processingTimeInMillis = LocalTime.ofNanoOfDay(durationInMillis * 1_000_000);
         calculateSuccessRate();
         chooseStatus();
+        if (ListUtils.isEmpty(columnHeaders)) {
+            columnHeaders.add("No header provided");
+        }
     }
 
     public void calculateSuccessRate() {
@@ -167,11 +174,11 @@ public class ImportResultDTO implements Serializable {
         this.fileSizeInBytes = fileSizeInBytes;
     }
 
-    public long getProcessingTimeInMillis() {
+    public LocalTime getProcessingTimeInMillis() {
         return processingTimeInMillis;
     }
 
-    public void setProcessingTimeInMillis(long processingTimeInMillis) {
+    public void setProcessingTimeInMillis(LocalTime processingTimeInMillis) {
         this.processingTimeInMillis = processingTimeInMillis;
     }
 
