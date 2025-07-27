@@ -3,6 +3,7 @@ package gabrielzrz.com.github.model;
 
 import gabrielzrz.com.github.model.base.BaseEntityVersioned;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.envers.Audited;
 
 import java.io.Serial;
@@ -21,19 +22,22 @@ public class Person extends BaseEntityVersioned implements Serializable {
     @Serial
     private static final long serialVersionUID = -7819953910276784376L;
 
+    @NotBlank(message = "Name cannot be blank")
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotBlank(message = "Address cannot be blank")
     @Column(name = "address", nullable = false)
     private String address;
 
+    @NotBlank(message = "Gender cannot be blank")
     @Column(name = "gender", nullable = false)
     private String gender;
 
-    @Column(name = "birth_day")
+    @Column(name = "birth_day", nullable = false)
     private LocalDate birthDay;
 
-    @Column(name = "enabled")
+    @Column(name = "enabled", nullable = false)
     private Boolean enabled = Boolean.TRUE;
 
     //Methods

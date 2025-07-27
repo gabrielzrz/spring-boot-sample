@@ -127,6 +127,16 @@ public class PersonServiceImpl implements PersonService {
 
     private void saveImportedPeople(List<PersonDTO> items, ImportResultDTO result) {
         List<Person> people = LambdaUtil.mapTo(items, dto -> ObjectMapper.parseObject(dto, Person.class));
+        try {
+            personRepository.saveAll(people);
+            result.setSuccessfulImports(people.size());
+        } catch (Exception exception) {
+            logger.warn("Batch people insert failed, switching to Individually mode: {}", exception.getMessage());
+            processImportedPersonIndividually(people, result);
+        }
+    }
+
+    private void processImportedPersonIndividually(List<Person> people, ImportResultDTO result) {
         for (Person person : people) {
             try {
                 personRepository.save(person);

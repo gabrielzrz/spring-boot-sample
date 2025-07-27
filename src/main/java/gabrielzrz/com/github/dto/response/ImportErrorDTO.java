@@ -12,7 +12,7 @@ public class ImportErrorDTO implements Serializable {
     private static final long serialVersionUID = -1534963535408916274L;
 
     // Variables
-    private String exception;
+    private String messageError; // Erro do que aconteceu. Pode ser a excetpion ou uma mensagem personalizada.
 
     // Erros para ler os arquivos
     private Integer rowNumber; // linha do arquivo que deu erro
@@ -27,14 +27,14 @@ public class ImportErrorDTO implements Serializable {
     }
 
     public ImportErrorDTO(String exception, String errorSave) {
-        this.exception = exception;
+        this.messageError = exception;
         this.errorSave = errorSave;
     }
 
     public ImportErrorDTO(Integer rowNumber, String field, String exception, String rejectedValue) {
         this.rowNumber = rowNumber;
         this.field = field;
-        this.exception = exception;
+        this.messageError = exception;
         this.rejectedValue = rejectedValue;
     }
 
@@ -55,12 +55,12 @@ public class ImportErrorDTO implements Serializable {
         this.field = field;
     }
 
-    public String getException() {
-        return exception;
+    public String getMessageError() {
+        return messageError;
     }
 
-    public void setException(String exception) {
-        this.exception = exception;
+    public void setMessageError(String messageError) {
+        this.messageError = messageError;
     }
 
     public String getErrorSave() {

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
  */
 public abstract class BaseCSVImporter<T> implements FileImporter<T> {
 
-    protected abstract T mapRecordToDTO(CSVRecord record);
+    protected abstract T mapRecordToDTO(CSVRecord record, ImportResultDTO result);
 
     @Override
     public List<T> importFile(InputStream inputStream, ImportResultDTO result) {
@@ -45,35 +44,9 @@ public abstract class BaseCSVImporter<T> implements FileImporter<T> {
     private List<T> parseRecords(Iterable<CSVRecord> records, ImportResultDTO result) {
         List<T> items = new ArrayList<>();
         for (CSVRecord record : records) {
-            try {
-                T item = mapRecordToDTO(record);
-                if (item != null) {
-                    items.add(item);
-                }
-            } catch (DateTimeParseException e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        (int) record.getRecordNumber(),
-                        "birthDay",
-                        "Data inválida: " + e.getMessage(),
-                        record.get("birthDay")
-                ));
-            } catch (IllegalArgumentException e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        (int) record.getRecordNumber(),
-                        "general",
-                        "Campo não encontrado: " + e.getMessage(),
-                        ""
-                ));
-            } catch (Exception e) {
-                result.incrementFailed();
-                result.addError(new ImportErrorDTO(
-                        (int) record.getRecordNumber(),
-                        "general",
-                        "Erro inesperado: " + e.getMessage(),
-                        record.toString()
-                ));
+            T item = mapRecordToDTO(record, result);
+            if (item != null) {
+                items.add(item);
             }
         }
         return items;

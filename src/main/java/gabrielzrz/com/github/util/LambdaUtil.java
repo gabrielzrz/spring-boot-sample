@@ -31,11 +31,15 @@ public class LambdaUtil {
     }
 
     public static <T, R> List<R> mapTo(Collection<T> collection, Function<T, R> function) {
-        return collection.stream().map(function).collect(Collectors.toList());
+        return ListUtils.isNotEmpty(collection)
+                ? collection.stream().map(function).collect(Collectors.toList())
+                : Collections.emptyList();
     }
 
     public static <T, R> List<R> mapTo(Collection<T> collection, Predicate<T> predicate, Function<T, R> function) {
-        return collection.stream().filter(predicate).map(function).collect(Collectors.toList());
+        return ListUtils.isNotEmpty(collection)
+                ? collection.stream().filter(predicate).map(function).collect(Collectors.toList())
+                : Collections.emptyList();
     }
 
     public static <T, R, A, C extends Collection<R>> C mapTo(Collection<T> collection, Function<T, R> function, Collector<R, A, C> collector) {
@@ -44,6 +48,25 @@ public class LambdaUtil {
 
     public static <T, R> List<R> mapDistinctTo(Collection<T> collection, Function<T, R> function) {
         return collection.stream().map(function).distinct().collect(Collectors.toList());
+    }
+
+    public static <T, R> String mapToString(Collection<T> collection, Predicate<T> predicate, Function<T, R> function, String delimiter) {
+        return ListUtils.isNotEmpty(collection)
+                ? collection.stream()
+                .filter(predicate)
+                .map(function)
+                .map(Object::toString)
+                .collect(Collectors.joining(delimiter))
+                : "";
+    }
+
+    public static <T, R> String mapToString(Collection<T> collection, Function<T, R> function, String delimiter) {
+        return ListUtils.isNotEmpty(collection)
+                ? collection.stream()
+                .map(function)
+                .map(Object::toString)
+                .collect(Collectors.joining(delimiter))
+                : "";
     }
 
     public static <T, R> List<R> flatMapTo(Collection<T> collection, Function<T, Collection<R>> function) {

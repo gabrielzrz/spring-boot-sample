@@ -8,14 +8,10 @@ import java.util.Set;
 
 /**
  * @author Zorzi
- * Utilitário para parsing e formatação de mensagens de erro de exceções do JPA/Spring Data
  */
 @Component
 public class ExceptionMessageParser {
 
-    /**
-     * Converte DataIntegrityViolationException em mensagem amigável
-     */
     public String parseDataIntegrityError(DataIntegrityViolationException e) {
         String message = e.getMostSpecificCause().getMessage().toLowerCase();
         if (message.contains("duplicate entry") || message.contains("unique constraint")) {
@@ -33,9 +29,6 @@ public class ExceptionMessageParser {
         }
     }
 
-    /**
-     * Converte ConstraintViolationException em mensagem amigável
-     */
     public String parseValidationErrors(Set<ConstraintViolation<?>> violations) {
         if (violations.isEmpty()) {
             return "Erro de validação desconhecido";
@@ -114,7 +107,7 @@ public class ExceptionMessageParser {
      * Formata erro de validação única
      */
     private String formatSingleValidationError(ConstraintViolation<?> violation) {
-        String field = getFieldDisplayName(violation.getPropertyPath().toString());
+        String field = violation.getPropertyPath().toString();
         String message = violation.getMessage();
         return field + ": " + message;
     }
@@ -125,35 +118,15 @@ public class ExceptionMessageParser {
     private String formatMultipleValidationErrors(Set<ConstraintViolation<?>> violations) {
         StringBuilder sb = new StringBuilder("Erros de validação: ");
         violations.forEach(violation -> {
-            String field = getFieldDisplayName(violation.getPropertyPath().toString());
-            sb.append(field)
+            sb.append(violation.getPropertyPath().toString())
                     .append(" (")
                     .append(violation.getMessage())
                     .append("), ");
         });
-
-        // Remove última vírgula e espaço
         if (sb.length() > 2) {
             sb.setLength(sb.length() - 2);
         }
-
         return sb.toString();
-    }
-
-    /**
-     * Converte nome técnico do campo para nome amigável
-     */
-    private String getFieldDisplayName(String fieldName) {
-        switch (fieldName.toLowerCase()) {
-            case "name": return "Nome";
-            case "email": return "Email";
-            case "birthday": return "Data de nascimento";
-            case "address": return "Endereço";
-            case "gender": return "Gênero";
-            case "phone": return "Telefone";
-            case "cpf": return "CPF";
-            default: return fieldName;
-        }
     }
 
     /**
