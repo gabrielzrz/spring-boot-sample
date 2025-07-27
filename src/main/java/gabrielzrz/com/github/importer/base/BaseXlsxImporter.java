@@ -39,10 +39,8 @@ public abstract class BaseXlsxImporter<T> implements FileImporter<T> {
         List<T> items = new ArrayList<>();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
-//            if (isRowValid(row)) {
-                T item = mapRowToDTO(row, result);
-                Optional.ofNullable(item).ifPresent(items::add);
-//            }
+            T item = mapRowToDTO(row, result);
+            Optional.ofNullable(item).ifPresent(items::add);
         }
         return items;
     }
