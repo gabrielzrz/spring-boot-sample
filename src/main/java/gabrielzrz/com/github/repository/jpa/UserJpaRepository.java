@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.repository;
+package gabrielzrz.com.github.repository.jpa;
 
 import gabrielzrz.com.github.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * @author Zorzi
  */
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserJpaRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT user FROM User user WHERE user.userName = :userName")
     User findByUsername(@Param("userName") String userName);

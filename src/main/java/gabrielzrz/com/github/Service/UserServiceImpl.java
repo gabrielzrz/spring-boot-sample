@@ -1,7 +1,7 @@
 package gabrielzrz.com.github.Service;
 
 import gabrielzrz.com.github.Service.contract.UserService;
-import gabrielzrz.com.github.repository.UserRepository;
+import gabrielzrz.com.github.repository.jpa.UserJpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserJpaRepository userJpaRepository) {
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsernameOptional(username).orElseThrow(() -> new UsernameNotFoundException("Username "+ username +" not found!"));
+        return userJpaRepository.findByUsernameOptional(username).orElseThrow(() -> new UsernameNotFoundException("Username "+ username +" not found!"));
     }
 }

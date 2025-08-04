@@ -7,7 +7,7 @@ import gabrielzrz.com.github.dto.security.AccountCredentialsDTO;
 import gabrielzrz.com.github.dto.security.TokenDTO;
 import gabrielzrz.com.github.exception.UserNameNotFoundException;
 import gabrielzrz.com.github.model.User;
-import gabrielzrz.com.github.repository.UserRepository;
+import gabrielzrz.com.github.repository.jpa.UserJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +31,18 @@ public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(getClass().getName());
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserJpaRepository userJpaRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
     public ResponseEntity<TokenDTO> signIn(AccountCredentialsDTO accountCredentialsDTO) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountCredentialsDTO.getUsername(), accountCredentialsDTO.getPassword()));
-        User user = userRepository.findByUsername(accountCredentialsDTO.getUsername());
+        User user = userJpaRepository.findByUsername(accountCredentialsDTO.getUsername());
         if (user == null) {
             throw new UserNameNotFoundException("Usarname " + accountCredentialsDTO.getUsername() + " not found");
         }
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken) {
-        var user = userRepository.findByUsername(username);
+        var user = userJpaRepository.findByUsername(username);
         TokenDTO token;
         if (user != null) {
             token = jwtTokenProvider.refreshToken(refreshToken);
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
         entity.setAccountNonLocked(true);
         entity.setCredentialsNonExpired(true);
         entity.setEnabled(true);
-        User dto = userRepository.save(entity);
+        User dto = userJpaRepository.save(entity);
         return new AccountCredentialsDTO(dto.getUsername(), dto.getPassword(), dto.getFullName());
     }
 

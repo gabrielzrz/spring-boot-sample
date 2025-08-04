@@ -1,7 +1,7 @@
 *.class
 
 # P6Spy
-database.log
+p6spy.log
 
 # IntelliJ IDEA
 .idea/
