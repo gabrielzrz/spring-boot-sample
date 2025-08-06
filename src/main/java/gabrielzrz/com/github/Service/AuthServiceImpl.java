@@ -50,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(token);
     }
 
+
     @Override
     public ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken) {
         var user = userJpaRepository.findByUsername(username);
