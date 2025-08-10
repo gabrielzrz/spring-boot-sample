@@ -9,6 +9,9 @@ import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 
+/**
+ * @author Zorzi
+ */
 public class UuidGeneratorCustom implements IdentifierGenerator {
 
     @Override

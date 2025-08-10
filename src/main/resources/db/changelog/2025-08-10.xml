@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="gabriel (generated)" id="1754800971907-1">
+        <createTable tableName="http_request_log">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="http_request_logPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="status_code" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="method" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response_body" type="TEXT"/>
+            <column name="response_header" type="TEXT"/>
+            <column name="request_body" type="TEXT"/>
+            <column name="request_header" type="TEXT"/>
+            <column name="content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754800971907-2">
+        <createTable tableName="http_request_log_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="status_code" type="INTEGER"/>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="method" type="VARCHAR(10)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="response_body" type="TEXT"/>
+            <column name="response_header" type="TEXT"/>
+            <column name="request_body" type="TEXT"/>
+            <column name="request_header" type="TEXT"/>
+            <column name="content_type" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754800971907-3">
+        <addPrimaryKey columnNames="rev, id" constraintName="http_request_log_audPK" tableName="http_request_log_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754800971907-4">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="http_request_log_aud" constraintName="FKs72pt42j1b4btr2udyq5cugef" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

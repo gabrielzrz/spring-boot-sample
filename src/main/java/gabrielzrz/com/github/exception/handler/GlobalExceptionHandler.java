@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass().getName());
+    private final Logger log= LoggerFactory.getLogger(getClass().getName());
 
     @ExceptionHandler({Exception.class})
     public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception exception, HttpServletRequest request) {
@@ -57,13 +57,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private void logUnexpectedError(Exception exception, String url, HttpStatus httpStatus) {
-        logger.error("Erro inesperado: {} | Path: {} | Status: {} | Usuário: {} | Exception: {} ",
-                exception.getMessage(),
-                url,
-                httpStatus.value(),
-                SecurityContextUtil.loggedusername(),
-                exception.getClass().getName(),
-                exception
-        );
+        if (log.isErrorEnabled()) {
+            log.error("Erro inesperado: {} | Path: {} | Status: {} | Usuário: {} | Exception: {} ",
+                    exception.getMessage(),
+                    url,
+                    httpStatus.value(),
+                    SecurityContextUtil.loggedusername(),
+                    exception.getClass().getName(),
+                    exception
+            );
+        }
     }
 }

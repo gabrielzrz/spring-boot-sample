@@ -3,14 +3,11 @@ package gabrielzrz.com.github.model;
 import gabrielzrz.com.github.model.base.BaseEntityVersioned;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -95,7 +92,7 @@ public class User extends BaseEntityVersioned implements UserDetails, Serializab
         return this.enabled;
     }
 
-    //Getters && Setters
+    // Getters && Setters
     public void setUserName(String userName) {
         this.userName = userName;
     }

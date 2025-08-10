@@ -9,7 +9,8 @@ public final class RepositoryAdapterConstants {
     }
 
     public static final class Jpa {
-        public static final String PERSON = "personJpaRepositoryAdapter";
         private Jpa() {}
+        public static final String PERSON = "personJpaRepositoryAdapter";
+        public static final String HTTP_REQUEST = "httpRequestLogRepositoryAdapter";
     }
 }
