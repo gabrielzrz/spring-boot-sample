@@ -40,10 +40,6 @@ public class Person extends BaseEntityVersioned implements Serializable {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = Boolean.TRUE;
 
-    //Methods
-    public Person() {
-    }
-
     //Getters && Setters
     public String getName() {
         return name;

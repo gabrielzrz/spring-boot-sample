@@ -3,13 +3,10 @@ package gabrielzrz.com.github.model;
 import gabrielzrz.com.github.model.base.BaseEntityVersioned;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -25,10 +22,6 @@ public class Permission extends BaseEntityVersioned implements GrantedAuthority,
 
     @Column(name = "description", nullable = false, length = 255)
     private String description;
-
-    //Methods
-    public Permission() {
-    }
 
     @Override
     public String getAuthority() {

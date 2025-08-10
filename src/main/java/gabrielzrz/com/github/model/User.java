@@ -49,10 +49,6 @@ public class User extends BaseEntityVersioned implements UserDetails, Serializab
     @JoinTable(name = "user_permission", joinColumns = {@JoinColumn(name = "id_user")}, inverseJoinColumns = {@JoinColumn(name = "id_permission")})
     private List<Permission> permissions;
 
-    //Methods
-    public User() {
-    }
-
     public List<String> getRoles() {
         return permissions.stream().map(p -> p.getDescription()).collect(Collectors.toList());
     }
