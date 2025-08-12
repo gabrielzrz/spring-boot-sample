@@ -65,6 +65,11 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
     }
 
     @Override
+    public List<Person> findAll() {
+        return personJpaRepository.findAll();
+    }
+
+    @Override
     public boolean existsById(UUID uuid) {
         return personJpaRepository.existsById(uuid);
     }

@@ -9,13 +9,13 @@ public enum ImportStatus {
     PARTIAL_SUCCESS("Importação concluída parcialmente"),
     FAILED("Importação falhou");
 
+    // Variables
+    private String description;
+
     // Constructor
     ImportStatus(String description) {
         this.description = description;
     }
-
-    // Variables
-    private String description;
 
     // Getters
     public String getDescription() {

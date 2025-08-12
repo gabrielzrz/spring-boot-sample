@@ -17,6 +17,8 @@ public interface BaseRepositoryPort<T, ID> {
 
     Page<T> findAll(Pageable pageable);
 
+    List<T> findAll();
+
     boolean existsById(ID id);
 
     T save(T entity);

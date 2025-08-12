@@ -1,0 +1,115 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="gabriel (generated)" id="1754958754485-2">
+        <createTable tableName="branch">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="branchPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_headquarters" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-3">
+        <createTable tableName="branch_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER"/>
+            <column name="branch_name" type="VARCHAR(100)"/>
+            <column name="is_active" type="BOOLEAN"/>
+            <column name="is_headquarters" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-4">
+        <createTable tableName="parameter">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="parameterPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parameter_type" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="data_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-5">
+        <createTable tableName="parameter_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER"/>
+            <column name="parameter_type" type="VARCHAR(100)"/>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="data_type" type="VARCHAR(20)"/>
+            <column name="branch_id" type="UUID"/>
+            <column name="note" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-6">
+        <addPrimaryKey columnNames="rev, id" constraintName="branch_audPK" tableName="branch_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-7">
+        <addPrimaryKey columnNames="rev, id" constraintName="parameter_audPK" tableName="parameter_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-8">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="branch_aud" constraintName="FK6jkm88122iurk8et84u29phc2" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-9">
+        <addForeignKeyConstraint baseColumnNames="branch_id" baseTableName="parameter" constraintName="FKjgi85fabp45xgjyl3ctvxbhip" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="branch" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-10">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="parameter_aud" constraintName="FKmx7hgx2ghk4jekpmcv4suqo4l" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1754958754485-1">
+        <addNotNullConstraint columnDataType="date" columnName="birth_day" tableName="person" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (manual)" id="1754958754485-11">
+        <sql>
+            INSERT INTO branch (id, created_at, created_by, updated_at, updated_by, VERSION, branch_name , is_active, is_headquarters)
+            VALUES (gen_random_uuid(), now(), NULL, NULL, NULL, 0, 'MATRIZ', TRUE, TRUE)
+        </sql>
+    </changeSet>
+</databaseChangeLog>

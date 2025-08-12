@@ -14,11 +14,11 @@ import java.util.Optional;
  * @author Zorzi
  */
 @Component(RepositoryAdapterConstants.Jpa.HTTP_REQUEST)
-public class HttpRequestLogRepositoryRepositoryAdapter implements HttpRequestLogRepositoryPort {
+public class HttpRequestLogJpaRepositoryAdapter implements HttpRequestLogRepositoryPort {
 
     private final HttpRequestLogRepository httpRequestLogRepository;
 
-    public HttpRequestLogRepositoryRepositoryAdapter(HttpRequestLogRepository httpRequestLogRepository) {
+    public HttpRequestLogJpaRepositoryAdapter(HttpRequestLogRepository httpRequestLogRepository) {
         this.httpRequestLogRepository = httpRequestLogRepository;
     }
 
