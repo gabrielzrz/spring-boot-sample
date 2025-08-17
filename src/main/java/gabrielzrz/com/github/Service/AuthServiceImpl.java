@@ -10,7 +10,6 @@ import gabrielzrz.com.github.model.User;
 import gabrielzrz.com.github.repository.jpa.UserJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,27 +39,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<TokenDTO> signIn(AccountCredentialsDTO accountCredentialsDTO) {
+    public TokenDTO signIn(AccountCredentialsDTO accountCredentialsDTO) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountCredentialsDTO.getUsername(), accountCredentialsDTO.getPassword()));
         User user = userJpaRepository.findByUsername(accountCredentialsDTO.getUsername());
         if (user == null) {
             throw new UserNameNotFoundException("Usarname " + accountCredentialsDTO.getUsername() + " not found");
         }
-        var token = jwtTokenProvider.createAcessToken(accountCredentialsDTO.getUsername(), user.getRoles());
-        return ResponseEntity.ok(token);
+        return jwtTokenProvider.createAcessToken(accountCredentialsDTO.getUsername(), user.getRoles());
     }
 
-
     @Override
-    public ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken) {
-        var user = userJpaRepository.findByUsername(username);
+    public TokenDTO refreshToken(String username, String refreshToken) {
+        User user = userJpaRepository.findByUsername(username);
         TokenDTO token;
         if (user != null) {
             token = jwtTokenProvider.refreshToken(refreshToken);
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found!");
         }
-        return ResponseEntity.ok(token);
+        return token;
     }
 
     @Override

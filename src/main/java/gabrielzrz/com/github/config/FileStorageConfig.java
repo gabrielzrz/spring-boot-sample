@@ -9,10 +9,6 @@ public class FileStorageConfig {
 
     private String uploadDir;
 
-    //Methods
-    public FileStorageConfig() {
-    }
-
     //Getters && Setters
     public String getUploadDir() {
         return uploadDir;

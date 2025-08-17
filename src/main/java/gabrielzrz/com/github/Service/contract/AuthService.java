@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
  */
 public interface AuthService {
 
-    ResponseEntity<TokenDTO> signIn(AccountCredentialsDTO accountCredentialsDTO);
+    TokenDTO signIn(AccountCredentialsDTO accountCredentialsDTO);
 
-    ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken);
+    TokenDTO refreshToken(String username, String refreshToken);
 
     AccountCredentialsDTO create(AccountCredentialsDTO user);
 }

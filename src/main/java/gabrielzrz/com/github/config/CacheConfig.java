@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Zorzi
  */
+@SuppressWarnings("rawtypes")
 @EnableCaching
 @Configuration
 public class CacheConfig {

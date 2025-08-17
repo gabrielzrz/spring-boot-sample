@@ -17,6 +17,7 @@ import java.util.*;
 /**
  * @author Zorzi
  */
+@SuppressWarnings("rawtypes")
 @Configuration
 public class OpenAPIConfig {
 

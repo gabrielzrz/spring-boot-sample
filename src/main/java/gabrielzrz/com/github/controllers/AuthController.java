@@ -2,6 +2,7 @@ package gabrielzrz.com.github.controllers;
 
 import gabrielzrz.com.github.Service.contract.AuthService;
 import gabrielzrz.com.github.dto.security.AccountCredentialsDTO;
+import gabrielzrz.com.github.dto.security.TokenDTO;
 import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,14 +28,11 @@ public class AuthController {
     //POST
     @Operation(summary = "Authenticates an user and returns a token")
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AccountCredentialsDTO accountCredentialsDTO) {
+    public ResponseEntity<TokenDTO> signin(@RequestBody AccountCredentialsDTO accountCredentialsDTO) {
         if (credentialIsNotNull(accountCredentialsDTO)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        var token = authService.signIn(accountCredentialsDTO);
-        if (token == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
-        }
+        TokenDTO token = authService.signIn(accountCredentialsDTO);
         return ResponseEntity.ok().body(token);
     }
 
@@ -47,14 +45,11 @@ public class AuthController {
 
     //PUT
     @PutMapping("/refresh/{username}")
-    public ResponseEntity<?> refreshToken(@PathVariable("username") String username, @RequestHeader("Authorization") String refreshToken) {
+    public ResponseEntity<TokenDTO> refreshToken(@PathVariable("username") String username, @RequestHeader("Authorization") String refreshToken) {
         if (parametersAreInvalid(username, refreshToken)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        var token = authService.refreshToken(username, refreshToken);
-        if (token == null) {
-            ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        }
+        TokenDTO token = authService.refreshToken(username, refreshToken);
         return  ResponseEntity.ok().body(token);
     }
 
