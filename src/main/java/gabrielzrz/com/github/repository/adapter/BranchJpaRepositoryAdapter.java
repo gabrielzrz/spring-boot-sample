@@ -26,8 +26,8 @@ public class BranchJpaRepositoryAdapter implements BranchRepositoryPort {
     }
 
     @Override
-    public Optional<Branch> findById(UUID uuid) {
-        return branchRepository.findById(uuid);
+    public Branch findById(UUID uuid) {
+        return branchRepository.findById(uuid).orElse(null);
     }
 
     @Override

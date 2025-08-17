@@ -8,11 +8,10 @@ import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportErrorDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.exception.ResourceNotFoundException;
-import gabrielzrz.com.github.mapper.ObjectMapper;
+import gabrielzrz.com.github.mapper.PersonMapper;
 import gabrielzrz.com.github.model.Person;
 import gabrielzrz.com.github.repository.port.PersonRepositoryPort;
 import gabrielzrz.com.github.util.ExceptionMessageParser;
-import gabrielzrz.com.github.util.LambdaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-import static gabrielzrz.com.github.mapper.ObjectMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -47,63 +45,59 @@ public class PersonServiceImpl implements PersonService {
     private final PagedResourcesAssembler<PersonDTO> assembler;
     private final ExceptionMessageParser exceptionMessageParser;
     private final FileImportService fileImportService;
+    private final PersonMapper personMapper;
 
     public PersonServiceImpl(
             @Qualifier(RepositoryAdapterConstants.Jpa.PERSON) PersonRepositoryPort personRepositoryPort,
             PagedResourcesAssembler<PersonDTO> assembler,
             ExceptionMessageParser exceptionMessageParser,
-            FileImportService fileImportService) {
+            FileImportService fileImportService, PersonMapper personMapper) {
         this.personRepositoryPort = personRepositoryPort;
         this.assembler = assembler;
         this.exceptionMessageParser = exceptionMessageParser;
         this.fileImportService = fileImportService;
+        this.personMapper = personMapper;
     }
 
     @Override
-    public PersonDTO findById(UUID id){
-        var entity = personRepositoryPort.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
-        return parseObject(entity, PersonDTO.class);
-        //return addHateoasLink(personDto);
+    public PersonDTO findById(UUID id) {
+        existsPersonById(id);
+        Person entity = personRepositoryPort.findById(id);
+        PersonDTO dto = personMapper.toDTO(entity);
+        return addHateoasLink(dto);
     }
 
     @Override
     public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) {
         Page<Person> people = personRepositoryPort.findAll(pageable);
-        Page<PersonDTO> peopleDTO = people.map(person -> {
-            return addHateoasLink(parseObject(person, PersonDTO.class));
-            //return ObjectMapper.parseObject(person, PersonDTO.class);
-        });
+        Page<PersonDTO> peopleDTO = people.map(personMapper::toDTO);
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
 
     @Override
     public PagedModel<EntityModel<PersonDTO>> findPersonByName(String name, Pageable pageable) {
         Page<Person> people = personRepositoryPort.findPeopleByName(name, pageable);
-        Page<PersonDTO> peopleDTO = people.map(person -> {
-            //return addHateoasLink(ObjectMapper.parseObject(person, PersonDTO.class));
-            return parseObject(person, PersonDTO.class);
-        });
+        Page<PersonDTO> peopleDTO = people.map(personMapper::toDTO);
         return assembler.toModel(peopleDTO, createLinkHAL(pageable));
     }
 
     @Override
     public Person create(PersonDTO person) {
-        Person p = parseObject(person, Person.class);
+        Person p = personMapper.toEntity(person);
         return personRepositoryPort.save(p);
     }
 
     @Override
-    public PersonDTO update(PersonDTO person) {
-        Person entity = personRepositoryPort.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + person.getId()));
-        entity.setName(person.getName());
-        entity.setAddress(person.getAddress());
-        entity.setGender(person.getGender());
-        return parseObject(personRepositoryPort.save(entity), PersonDTO.class);
+    public PersonDTO update(PersonDTO personDTO) {
+        existsPersonById(personDTO.getId());
+        Person person = personRepositoryPort.save(personMapper.toEntity(personDTO));
+        return personMapper.toDTO(person);
     }
 
     @Override
     public void delete(UUID id) {
-        Person entity = personRepositoryPort.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID: " + id));
+        existsPersonById(id);
+        Person entity = personRepositoryPort.findById(id);
         personRepositoryPort.delete(entity);
     }
 
@@ -114,17 +108,24 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonDTO disablePerson(UUID id) {
-        Person person = personRepositoryPort.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        existsPersonById(id);
         personRepositoryPort.disablePerson(id);
-        PersonDTO dto = parseObject(person, PersonDTO.class);
+        Person person = personRepositoryPort.findById(id);
+        PersonDTO dto = personMapper.toDTO(person);
         return addHateoasLink(dto);
     }
 
+    private void existsPersonById(UUID id) {
+        if (!personRepositoryPort.existsById(id)) {
+            throw new ResourceNotFoundException("No records found for this ID: " + id);
+        }
+    }
+
     private void saveImportedPeople(List<PersonDTO> items, ImportResultDTO result) {
-        List<Person> people = LambdaUtil.mapTo(items, dto -> ObjectMapper.parseObject(dto, Person.class));
+        List<Person> people = personMapper.toEntity(items);
         try {
-            personRepositoryPort.saveAll(people);
-            result.setSuccessfulImports(people.size());
+            int sizeSave = personRepositoryPort.saveAll(people).size();
+            result.setSuccessfulImports(sizeSave);
         } catch (Exception exception) {
             logger.warn("Batch people insert failed, switching to Individually mode: {}", exception.getMessage());
             processImportedPersonIndividually(people, result);

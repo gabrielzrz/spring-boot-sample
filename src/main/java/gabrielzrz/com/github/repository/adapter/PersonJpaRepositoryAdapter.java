@@ -30,8 +30,8 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
     }
 
     @Override
-    public Optional<Person> findById(UUID id) {
-        return personJpaRepository.findById(id);
+    public Person findById(UUID id) {
+        return personJpaRepository.findById(id).orElse(null);
     }
 
     @Override

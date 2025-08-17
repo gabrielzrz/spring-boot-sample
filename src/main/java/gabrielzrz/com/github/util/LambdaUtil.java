@@ -1,6 +1,8 @@
 package gabrielzrz.com.github.util;
 
-import org.apache.commons.collections.CollectionUtils;
+
+
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.function.Function;

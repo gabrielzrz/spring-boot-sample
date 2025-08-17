@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public interface BaseRepositoryPort<T, ID> {
 
-    Optional<T> findById(ID id);
+    T findById(ID id);
 
     Page<T> findAll(Pageable pageable);
 

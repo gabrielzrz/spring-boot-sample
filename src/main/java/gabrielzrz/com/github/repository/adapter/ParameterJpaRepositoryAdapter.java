@@ -26,8 +26,8 @@ public class ParameterJpaRepositoryAdapter implements ParameterRepositoryPort {
     }
 
     @Override
-    public Optional<Parameter> findById(UUID uuid) {
-        return parameterRepository.findById(uuid);
+    public Parameter findById(UUID uuid) {
+        return parameterRepository.findById(uuid).orElse(null);
     }
 
     @Override
