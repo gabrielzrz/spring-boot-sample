@@ -76,7 +76,12 @@ public class ParameterJpaRepositoryAdapter implements ParameterRepositoryPort {
     }
 
     @Override
-    public Optional<Parameter> findFromHeadquartersBy(ParameterType name) {
-        return null;
+    public Optional<Parameter> getEnvironmentType() {
+        return parameterRepository.findByParameterType(ParameterType.SYSTEM_ENVIRONMENT_TYPE);
+    }
+
+    @Override
+    public Optional<Parameter> findByParameterType(ParameterType parameterType) {
+        return parameterRepository.findByParameterType(parameterType);
     }
 }

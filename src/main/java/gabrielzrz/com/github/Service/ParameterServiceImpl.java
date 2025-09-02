@@ -3,11 +3,13 @@ package gabrielzrz.com.github.Service;
 import gabrielzrz.com.github.Service.contract.BranchService;
 import gabrielzrz.com.github.Service.contract.ParameterService;
 import gabrielzrz.com.github.constants.RepositoryAdapterConstants;
+import gabrielzrz.com.github.enums.EnvironmentType;
 import gabrielzrz.com.github.enums.ParameterType;
 import gabrielzrz.com.github.model.Branch;
 import gabrielzrz.com.github.model.Parameter;
 import gabrielzrz.com.github.repository.port.ParameterRepositoryPort;
 import gabrielzrz.com.github.util.LambdaUtil;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -42,8 +45,16 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public String getDiscordUrl() {
-        return null;
+    public EnvironmentType getEnvironmentType() {
+        return parameterRepositoryPort.getEnvironmentType()
+                .filter(parameter -> StringUtils.isNotBlank(parameter.getValue()))
+                .map(parameter ->  EnvironmentType.valueOf(parameter.getValue()))
+                .orElse(EnvironmentType.DEV);
+    }
+
+    @Override
+    public Parameter findByParameterType(ParameterType parameterType) {
+        return parameterRepositoryPort.findByParameterType(parameterType).orElse(null);
     }
 
     private void updateByBranch(Branch branch) {

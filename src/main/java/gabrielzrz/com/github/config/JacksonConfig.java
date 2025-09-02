@@ -22,13 +22,10 @@ public class JacksonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer customize() {
-        // JavaTimeModule implements ISO-8601
         return builder ->
                 builder.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
                         .serializationInclusion(JsonInclude.Include.NON_NULL)
-                        .featuresToEnable(
-                                SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, // To write in milliseconds
-                                DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
+                        .featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
                         .featuresToDisable(
                                 SerializationFeature.FAIL_ON_EMPTY_BEANS,
                                 SerializationFeature.WRITE_DATES_WITH_ZONE_ID,

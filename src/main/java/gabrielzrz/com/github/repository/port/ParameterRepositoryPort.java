@@ -19,5 +19,7 @@ public interface ParameterRepositoryPort extends BaseRepositoryPort<Parameter, U
 
     List<Parameter> findAllByBranchId(UUID branchId);
 
-    Optional<Parameter> findFromHeadquartersBy(ParameterType parameterType);
+    Optional<Parameter> getEnvironmentType();
+
+    Optional<Parameter> findByParameterType(ParameterType parameterType);
 }

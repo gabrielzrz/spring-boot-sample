@@ -50,6 +50,18 @@ public class HttpRequestLog extends BaseEntityAuditable implements Serializable 
     @Column(name = "method", length = 10, nullable = false)
     private HttpRequestMethod method;
 
+    // Constructors
+    public HttpRequestLog() {
+    }
+
+    public HttpRequestLog(String url, String contentType, String requestBody, HttpRequestType type, HttpRequestMethod method) {
+        this.url = url;
+        this.contentType = contentType;
+        this.requestBody = requestBody;
+        this.type = type;
+        this.method = method;
+    }
+
     // Getters && Setters
     public Integer getStatusCode() {
         return statusCode;

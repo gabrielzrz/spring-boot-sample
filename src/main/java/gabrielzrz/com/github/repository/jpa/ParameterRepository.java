@@ -21,5 +21,5 @@ public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 
     List<Parameter> findAllByBranchId(UUID branchId);
 
-    //Optional<Parameter> findFromHeadquartersBy(ParameterType name);
+    Optional<Parameter> findByParameterType(ParameterType parameterType);
 }
