@@ -48,6 +48,19 @@ public class HttpClientServiceImpl implements HttpClientService {
         return parseResponse(httpRequestLog, responseType);
     }
 
+    // Métodos retornam Mono/Flux
+    public <T, R> Mono<R> reactivePost(String url, MediaType contentType, T requestBody, HttpRequestType httpRequestType, ParameterizedTypeReference<R> responseType, boolean isToSaveLog) {
+        HttpRequestLog httpRequestLog = new HttpRequestLog(url, contentType.toString(), getJson(requestBody), httpRequestType, HttpRequestMethod.POST);
+        return reactiveSendPostRequest(url, contentType, requestBody, httpRequestLog)
+                .doOnNext(responseBody -> {
+                    if (isToSaveLog) {
+                        httpRequestLog.setResponseBody(responseBody);
+                        httpRequestLogService.save(httpRequestLog);
+                    }
+                })
+                .map(responseBody -> parseResponse(httpRequestLog, responseType));
+    }
+
     @Override
     public <T> void postMultipart(String url, List<MultiPartDTO<T>> parts) {
         MultipartBodyBuilder multipartBodyBuilder = getMultipartBodyBuilder(parts);
@@ -75,15 +88,26 @@ public class HttpClientServiceImpl implements HttpClientService {
                 .block();
     }
 
+    // Retorna Mono<String>
+    private <T> Mono<String> reactiveSendPostRequest(String url, MediaType contentType, T requestBody, HttpRequestLog httpRequestLog) {
+        return webClient.post()
+                .uri(url)
+                .contentType(contentType)
+                .bodyValue(requestBody)
+                .exchangeToMono(response -> {
+                    httpRequestLog.setStatusCode(response.statusCode().value());
+                    httpRequestLog.setResponseHeader(response.headers().asHttpHeaders().toString());
+                    return response.bodyToMono(String.class);
+                });
+    }
+
     private void sendPostMultipartRequest(String url, MultipartBodyBuilder multipartBodyBuilder) {
         webClient.post()
                 .uri(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchangeToMono(response -> Mono.just(response.statusCode()))
-                .doOnError(error -> {
-                    logger.error("Error to send MultiParte {}", error.getMessage());
-                })
+                .doOnError(error -> logger.error("Error to send MultiParte {}", error.getMessage()))
                 .block();
     }
 
