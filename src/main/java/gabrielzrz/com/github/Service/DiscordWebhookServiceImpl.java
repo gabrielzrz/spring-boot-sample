@@ -42,7 +42,7 @@ public class DiscordWebhookServiceImpl implements DiscordWebhookService {
     private static final String REQUEST_BODY_TXT = "request-body.txt";
     private static final String PAYLOAD_JSON = "payload_json";
 
-    //@Async
+    @Async
     @Override
     public void send(String content, String requestBody, Exception exception) {
         String url = parameterService.findByParameterType(ParameterType.SYSTEM_DISCORD_WEBHOOK_URL).getValue();
