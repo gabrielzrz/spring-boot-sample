@@ -28,12 +28,10 @@ public class FileImporterFactory {
     public <T> FileImporter<T> getImporter(String fileName, Class<T> dtoClass) {
         FileType fileType = FileType.fromFileName(fileName);
         ImporterKey key = new ImporterKey(fileType, dtoClass);
-
         FileImporter<?> importer = importers.get(key);
         if (importer == null) {
             throw new BadRequestException("Importer não encontrado para " + fileType + " com tipo " + dtoClass.getSimpleName());
         }
-
         return (FileImporter<T>) importer;
     }
 
@@ -49,7 +47,6 @@ public class FileImporterFactory {
         if (annotation != null) {
             return new ImporterKey(annotation.fileType(), annotation.dtoClass());
         }
-
-        throw new IllegalStateException("Importer deve ter anotação @FileImporterFor ou implementar ConfigurableImporter");
+        throw new IllegalStateException("Importer deve ter anotação @FileImporterFor");
     }
 }
