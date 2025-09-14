@@ -1,12 +1,15 @@
 package gabrielzrz.com.github.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Zorzi
+ */
 @Configuration
-@ConfigurationProperties(prefix = "file")
 public class FileStorageConfig {
 
+    @Value("${file.upload-dir}")
     private String uploadDir;
 
     //Getters && Setters

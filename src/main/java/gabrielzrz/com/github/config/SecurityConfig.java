@@ -31,7 +31,7 @@ import java.util.Map;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${cors.origin.Patterns:default}")
+    @Value("${cors.origin.Patterns}")
     private String corsOriginPatterns = "";
 
     private JwtTokenProvider jwtTokenProvider;

@@ -2,16 +2,11 @@ package gabrielzrz.com.github.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.yaml.MappingJackson2YamlHttpMessageConverter;
-import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -21,16 +16,6 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) { // Cors
-//        var allowedOrigins = corsOriginPatterns.split(",");
-//        registry.addMapping("/**") // Informo que as regras abaixo serão para todos os endpoint
-//                .allowedOrigins("*") // Defino qual origem (frontend) pode acessar meus endpoints
-//                .allowedMethods("*") // Defino que todos os verbos são permitidos. Exem: GET, POST, PUT, DELETE, PATCH, OPTIONS
-//                .allowedHeaders("*") // Permite todos os cabeçalhos. Como: Authorization, Content-Type
-//                .allowCredentials(false); // Define se a API permite credenciais cross-origin. Como: Cookies (JSESSIONID, sessões)
-//    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

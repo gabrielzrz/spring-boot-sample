@@ -50,7 +50,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING); // copia de fato
             return fileName;
         } catch (IOException ex) {
-            logger.error("Could not store file " + fileName + ". Please try Again!", ex);
+            logger.error("Could not store file {}. Please try Again!", fileName);
             throw new FileStorageException("Could not store file " + fileName + ". Please try Again!", ex);
         }
     }
@@ -62,14 +62,14 @@ public class FileStorageServiceImpl implements FileStorageService {
             Resource resource = new UrlResource(filePath.toUri());
             return Optional.ofNullable(resource).filter(Resource::exists).orElseThrow(() -> new FileNotFoundException("File " + fileName + " not Found"));
         } catch (Exception ex) {
-            logger.error("File " + fileName + " not Found", ex);
+            logger.error("File {} not found", fileName);
             throw new FileNotFoundException("File " + fileName + " not Found", ex);
         }
     }
 
     private void verifyInvalidSequence(String fileName) {
         if (fileName.contains("..")) {
-            logger.error("Sorry! Filename Contains a Invalid path Sequence " + fileName);
+            logger.error("Sorry! Filename Contains a Invalid path Sequence {}", fileName);
             throw new FileStorageException("Sorry! Filename Contains a Invalid path Sequence " + fileName);
         }
     }
