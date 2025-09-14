@@ -1,6 +1,5 @@
 package gabrielzrz.com.github.importer.contract;
 
-import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 
 import java.io.InputStream;

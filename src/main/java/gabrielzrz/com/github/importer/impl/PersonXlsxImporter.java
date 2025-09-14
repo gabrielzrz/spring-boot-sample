@@ -3,6 +3,8 @@ package gabrielzrz.com.github.importer.impl;
 import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportErrorDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
+import gabrielzrz.com.github.enums.FileType;
+import gabrielzrz.com.github.importer.contract.FileImporterFor;
 import gabrielzrz.com.github.importer.base.BaseXlsxImporter;
 import gabrielzrz.com.github.util.LambdaUtil;
 import io.micrometer.common.util.StringUtils;
@@ -21,6 +23,7 @@ import java.util.Optional;
  * @author Zorzi
  */
 @Component
+@FileImporterFor(fileType = FileType.XLSX, dtoClass = PersonDTO.class)
 public class PersonXlsxImporter extends BaseXlsxImporter<PersonDTO> {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
