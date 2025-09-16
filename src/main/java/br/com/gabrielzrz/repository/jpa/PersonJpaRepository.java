@@ -1,0 +1,28 @@
+package br.com.gabrielzrz.repository.jpa;
+
+import br.com.gabrielzrz.model.Person;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+/**
+ * @author Zorzi
+ */
+@Repository
+public interface PersonJpaRepository extends JpaRepository<Person, UUID> {
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("UPDATE Person p SET p.enabled = FALSE WHERE p.id = :id")
+    int disablePerson(@Param("id") UUID id);
+
+    @Query("SELECT p FROM Person p WHERE UPPER(p.name) LIKE UPPER(CONCAT('%',:name,'%'))")
+    Page<Person> findPeopleByName(@Param("name") String name, Pageable pageable);
+}
