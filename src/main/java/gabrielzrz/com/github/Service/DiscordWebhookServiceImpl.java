@@ -45,7 +45,8 @@ public class DiscordWebhookServiceImpl implements DiscordWebhookService {
     @Async
     @Override
     public void send(String content, String requestBody, Exception exception) {
-        String url = parameterService.findByParameterType(ParameterType.SYSTEM_DISCORD_WEBHOOK_URL).getValue();
+        Parameter parameterDiscord = parameterService.findByParameterType(ParameterType.SYSTEM_DISCORD_WEBHOOK_URL);
+        String url = parameterDiscord != null ? parameterDiscord.getValue() : null;
         if (!isSendWebhook(url, requestBody)) {
             return;
         }

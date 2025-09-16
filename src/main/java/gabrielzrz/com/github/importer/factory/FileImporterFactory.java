@@ -2,7 +2,7 @@ package gabrielzrz.com.github.importer.factory;
 
 import gabrielzrz.com.github.enums.FileType;
 import gabrielzrz.com.github.exception.BadRequestException;
-import gabrielzrz.com.github.importer.contract.FileImporterFor;
+import gabrielzrz.com.github.annotation.FileImporterFor;
 import gabrielzrz.com.github.importer.contract.ImporterKey;
 import gabrielzrz.com.github.importer.contract.FileImporter;
 import org.springframework.stereotype.Component;

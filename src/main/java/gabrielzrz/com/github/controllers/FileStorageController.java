@@ -24,14 +24,14 @@ import java.util.Optional;
 
 @Tag(name = "File", description = "Upload and Download to files")
 @RestController
-@RequestMapping("/api/file")
-public class FileController {
+@RequestMapping("/api/file-storage")
+public class FileStorageController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     private FileStorageService fileStorageService;
 
-    public FileController(FileStorageService fileStorageService) {
+    public FileStorageController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 

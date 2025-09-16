@@ -1,4 +1,4 @@
-package gabrielzrz.com.github.importer.contract;
+package gabrielzrz.com.github.annotation;
 
 import gabrielzrz.com.github.enums.FileType;
 

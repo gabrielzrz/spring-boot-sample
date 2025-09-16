@@ -4,7 +4,7 @@ import gabrielzrz.com.github.dto.PersonDTO;
 import gabrielzrz.com.github.dto.response.ImportErrorDTO;
 import gabrielzrz.com.github.dto.response.ImportResultDTO;
 import gabrielzrz.com.github.enums.FileType;
-import gabrielzrz.com.github.importer.contract.FileImporterFor;
+import gabrielzrz.com.github.annotation.FileImporterFor;
 import gabrielzrz.com.github.importer.base.BaseCSVImporter;
 import gabrielzrz.com.github.util.LambdaUtil;
 import io.micrometer.common.util.StringUtils;
