@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.exception;
+package br.com.gabrielzrz.exception.handler;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;

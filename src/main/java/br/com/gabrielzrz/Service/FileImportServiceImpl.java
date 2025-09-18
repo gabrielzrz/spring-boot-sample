@@ -4,8 +4,8 @@ import br.com.gabrielzrz.Service.contract.FileImportService;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.ImportStatus;
 import br.com.gabrielzrz.exception.BadRequestException;
-import br.com.gabrielzrz.importer.contract.FileImporter;
-import br.com.gabrielzrz.importer.factory.FileImporterFactory;
+import br.com.gabrielzrz.datatransfer.importer.contract.FileImporter;
+import br.com.gabrielzrz.datatransfer.importer.factory.FileImporterFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

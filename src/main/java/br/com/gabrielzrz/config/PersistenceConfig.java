@@ -20,7 +20,7 @@ import static java.util.Objects.nonNull;
  */
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-@EnableJpaRepositories("gabrielzrz.com.github.repository")
+@EnableJpaRepositories("br.com.gabrielzrz.repository")
 public class PersistenceConfig {
 
     @Bean

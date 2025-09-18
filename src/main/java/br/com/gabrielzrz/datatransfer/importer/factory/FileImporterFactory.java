@@ -1,10 +1,10 @@
-package br.com.gabrielzrz.importer.factory;
+package br.com.gabrielzrz.datatransfer.importer.factory;
 
 import br.com.gabrielzrz.enums.FileType;
 import br.com.gabrielzrz.exception.BadRequestException;
 import br.com.gabrielzrz.annotation.FileImporterFor;
-import br.com.gabrielzrz.importer.contract.ImporterKey;
-import br.com.gabrielzrz.importer.contract.FileImporter;
+import br.com.gabrielzrz.datatransfer.importer.contract.ImporterKey;
+import br.com.gabrielzrz.datatransfer.importer.contract.FileImporter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

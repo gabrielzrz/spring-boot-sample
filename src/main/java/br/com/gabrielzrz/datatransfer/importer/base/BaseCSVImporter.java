@@ -1,9 +1,9 @@
-package br.com.gabrielzrz.importer.base;
+package br.com.gabrielzrz.datatransfer.importer.base;
 
 import br.com.gabrielzrz.dto.response.ImportErrorDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.ImportStatus;
-import br.com.gabrielzrz.importer.contract.FileImporter;
+import br.com.gabrielzrz.datatransfer.importer.contract.FileImporter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
