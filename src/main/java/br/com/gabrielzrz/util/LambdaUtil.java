@@ -1,8 +1,6 @@
 package br.com.gabrielzrz.util;
 
-
-
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -33,13 +31,13 @@ public class LambdaUtil {
     }
 
     public static <T, R> List<R> mapTo(Collection<T> collection, Function<T, R> function) {
-        return ListUtils.isNotEmpty(collection)
+        return CollectionUtils.isNotEmpty(collection)
                 ? collection.stream().map(function).collect(Collectors.toList())
                 : Collections.emptyList();
     }
 
     public static <T, R> List<R> mapTo(Collection<T> collection, Predicate<T> predicate, Function<T, R> function) {
-        return ListUtils.isNotEmpty(collection)
+        return CollectionUtils.isNotEmpty(collection)
                 ? collection.stream().filter(predicate).map(function).collect(Collectors.toList())
                 : Collections.emptyList();
     }
@@ -53,7 +51,7 @@ public class LambdaUtil {
     }
 
     public static <T, R> String mapToString(Collection<T> collection, Predicate<T> predicate, Function<T, R> function, String delimiter) {
-        return ListUtils.isNotEmpty(collection)
+        return CollectionUtils.isNotEmpty(collection)
                 ? collection.stream()
                 .filter(predicate)
                 .map(function)
@@ -63,7 +61,7 @@ public class LambdaUtil {
     }
 
     public static <T, R> String mapToString(Collection<T> collection, Function<T, R> function, String delimiter) {
-        return ListUtils.isNotEmpty(collection)
+        return CollectionUtils.isNotEmpty(collection)
                 ? collection.stream()
                 .map(function)
                 .map(Object::toString)

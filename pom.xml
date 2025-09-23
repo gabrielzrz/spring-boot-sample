@@ -25,6 +25,7 @@
 		<apache.poi.version>5.2.5</apache.poi.version>
 		<apache.commons.version>1.11.0</apache.commons.version>
 		<p6spy-spring-boot-starter.version>1.12.0</p6spy-spring-boot-starter.version>
+		<commons-collections4.version>4.5.0</commons-collections4.version>
 	</properties>
 	<dependencies>
 		<!--Spring Boot-->
@@ -150,6 +151,12 @@
 			<artifactId>p6spy-spring-boot-starter</artifactId>
 			<version>${p6spy-spring-boot-starter.version}</version>
 		</dependency>
+        <!--Apache Commons-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>

@@ -1,6 +1,5 @@
 package br.com.gabrielzrz.config;
 
-import br.com.gabrielzrz.util.Attribute;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -20,6 +19,10 @@ import java.util.*;
 @SuppressWarnings("rawtypes")
 @Configuration
 public class OpenAPIConfig {
+
+    public static final String ID = "id";
+    public static final String CREATED_AT = "createdAt";
+    public static final String CREATED_BY = "createdBy";
 
     @Bean
     public OpenAPI openAPI() {
@@ -67,15 +70,15 @@ public class OpenAPIConfig {
 
     private Map<String, Schema> getStandardProperties(Schema schema) {
         Map<String, Schema> properties = new TreeMap<>(schema.getProperties());
-        Arrays.asList(Attribute.ID, Attribute.CREATED_AT, Attribute.CREATED_BY).forEach(properties.keySet()::remove);
+        Arrays.asList(ID, CREATED_AT, CREATED_BY).forEach(properties.keySet()::remove);
         return properties;
     }
 
     private Map<String, Schema> getFinalProperties(Schema schema, Map<String, Schema> standardProperties) {
         Map<String, Schema> properties = new LinkedHashMap<>();
-        properties.put(Attribute.ID, (Schema) schema.getProperties().get(Attribute.ID));
-        properties.put(Attribute.CREATED_AT, (Schema) schema.getProperties().get(Attribute.CREATED_AT));
-        properties.put(Attribute.CREATED_BY, (Schema) schema.getProperties().get(Attribute.CREATED_BY));
+        properties.put(ID, (Schema) schema.getProperties().get(ID));
+        properties.put(CREATED_AT, (Schema) schema.getProperties().get(CREATED_AT));
+        properties.put(CREATED_BY, (Schema) schema.getProperties().get(CREATED_BY));
         properties.putAll(standardProperties);
         return properties;
     }

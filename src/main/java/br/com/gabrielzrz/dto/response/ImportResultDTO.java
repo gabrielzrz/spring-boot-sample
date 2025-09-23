@@ -2,7 +2,7 @@ package br.com.gabrielzrz.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import br.com.gabrielzrz.enums.ImportStatus;
-import br.com.gabrielzrz.util.ListUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -86,7 +86,7 @@ public class ImportResultDTO implements Serializable {
         this.processingTimeInMillis = LocalTime.ofNanoOfDay(durationInMillis * 1_000_000);
         calculateSuccessRate();
         chooseStatus();
-        if (ListUtils.isEmpty(columnHeaders)) {
+        if (CollectionUtils.isEmpty(columnHeaders)) {
             columnHeaders.add("No header provided");
         }
     }
