@@ -21,6 +21,13 @@ import java.util.TimeZone;
 public class JacksonConfig {
 
     @Bean
+    @Primary
+    @DependsOn("customize")
+    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
+        return builder.build();
+    }
+
+    @Bean
     public Jackson2ObjectMapperBuilderCustomizer customize() {
         return builder ->
                 builder.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
@@ -34,12 +41,5 @@ public class JacksonConfig {
                                 DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, // To read in milliseconds
                                 DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE,
                                 DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    }
-
-    @Bean
-    @Primary
-    @DependsOn("customize")
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        return builder.build();
     }
 }

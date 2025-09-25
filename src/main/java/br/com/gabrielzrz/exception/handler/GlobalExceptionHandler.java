@@ -1,7 +1,7 @@
 package br.com.gabrielzrz.exception.handler;
 
+import br.com.gabrielzrz.Service.contract.JsonService;
 import br.com.gabrielzrz.exception.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.gabrielzrz.Service.contract.DiscordWebhookService;
 import br.com.gabrielzrz.util.SecurityContextUtil;
 import jakarta.servlet.ServletRequest;
@@ -27,12 +27,14 @@ import static java.util.Objects.isNull;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final DiscordWebhookService discordWebhookService;
-
     private final Logger log = LoggerFactory.getLogger(getClass().getName());
 
-    public GlobalExceptionHandler(DiscordWebhookService discordWebhookService) {
+    private final DiscordWebhookService discordWebhookService;
+    private final JsonService jsonService;
+
+    public GlobalExceptionHandler(DiscordWebhookService discordWebhookService, JsonService jsonService) {
         this.discordWebhookService = discordWebhookService;
+        this.jsonService = jsonService;
     }
 
     @ExceptionHandler({Exception.class})
@@ -104,17 +106,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private String getRequestBody(HttpServletRequest request) {
-        try {
-            if (isNull(request)) {
-                return "{}";
-            }
-            String requestBody = findWrapper(request)
-                    .map(wrapper -> new String(wrapper.getContentAsByteArray()))
-                    .orElse(null);
-            return new ObjectMapper().readTree(requestBody).toString();
-        } catch (Exception exception) {
-            return null;
+        if (isNull(request)) {
+            return "{}";
         }
+        String requestBody = findWrapper(request)
+                .map(wrapper -> new String(wrapper.getContentAsByteArray()))
+                .orElse("{}");
+        return jsonService.readTree(requestBody).toString();
     }
 
     private Optional<ContentCachingRequestWrapper> findWrapper(ServletRequest request) {

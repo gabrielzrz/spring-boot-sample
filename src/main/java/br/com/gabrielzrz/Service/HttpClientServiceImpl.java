@@ -1,7 +1,6 @@
 package br.com.gabrielzrz.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.gabrielzrz.Service.contract.JsonService;
 import br.com.gabrielzrz.Service.contract.HttpClientService;
 import br.com.gabrielzrz.Service.contract.HttpRequestLogService;
 import br.com.gabrielzrz.dto.MultiPartDTO;
@@ -19,7 +18,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Zorzi
@@ -30,18 +28,18 @@ public class HttpClientServiceImpl implements HttpClientService {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientServiceImpl.class);
 
     private final WebClient webClient;
-    private final ObjectMapper objectMapper;
     private final HttpRequestLogService httpRequestLogService;
+    private final JsonService jsonService;
 
-    public HttpClientServiceImpl(WebClient webClient, ObjectMapper objectMapper, HttpRequestLogService httpRequestLogService) {
+    public HttpClientServiceImpl(WebClient webClient, HttpRequestLogService httpRequestLogService, JsonService jsonService) {
         this.webClient = webClient;
-        this.objectMapper = objectMapper;
         this.httpRequestLogService = httpRequestLogService;
+        this.jsonService = jsonService;
     }
 
     @Override
     public <T, R> R post(String url, MediaType contentType, T requestBody, HttpRequestType httpRequestType, ParameterizedTypeReference<R> responseType, boolean isToSaveLog) {
-        HttpRequestLog httpRequestLog = new HttpRequestLog(url, contentType.toString(), getJson(requestBody), httpRequestType, HttpRequestMethod.POST);
+        HttpRequestLog httpRequestLog = new HttpRequestLog(url, contentType.toString(), jsonService.toJson(requestBody), httpRequestType, HttpRequestMethod.POST);
         String responseBody = sendPostRequest(url, contentType, requestBody, httpRequestLog);
         httpRequestLog.setResponseBody(responseBody);
         saveLog(isToSaveLog, httpRequestLog);
@@ -50,7 +48,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 
     // Métodos retornam Mono/Flux
     public <T, R> Mono<R> reactivePost(String url, MediaType contentType, T requestBody, HttpRequestType httpRequestType, ParameterizedTypeReference<R> responseType, boolean isToSaveLog) {
-        HttpRequestLog httpRequestLog = new HttpRequestLog(url, contentType.toString(), getJson(requestBody), httpRequestType, HttpRequestMethod.POST);
+        HttpRequestLog httpRequestLog = new HttpRequestLog(url, contentType.toString(), jsonService.toJson(requestBody), httpRequestType, HttpRequestMethod.POST);
         return reactiveSendPostRequest(url, contentType, requestBody, httpRequestLog)
                 .doOnNext(responseBody -> {
                     if (isToSaveLog) {
@@ -68,11 +66,7 @@ public class HttpClientServiceImpl implements HttpClientService {
     }
 
     private <T> T parseResponse(HttpRequestLog httpRequestLog, ParameterizedTypeReference<T> responseType) {
-        try {
-            return objectMapper.readValue(httpRequestLog.getResponseBody(), objectMapper.constructType(responseType.getType()));
-        } catch (JsonProcessingException | IllegalArgumentException e) {
-            return null;
-        }
+        return jsonService.fromJson(httpRequestLog.getResponseBody(), responseType.getType());
     }
 
     private <T> String sendPostRequest(String url, MediaType contentType, T requestBody, HttpRequestLog httpRequestLog) {
@@ -114,18 +108,6 @@ public class HttpClientServiceImpl implements HttpClientService {
     private void saveLog(boolean isToSaveLog, HttpRequestLog httpRequestLog) {
         if (isToSaveLog) {
             httpRequestLogService.save(httpRequestLog);
-        }
-    }
-
-    private <T> String getJson(T json) {
-        try {
-            if (Objects.isNull(json)) {
-                return null;
-            }
-            return objectMapper.writeValueAsString(json);
-        } catch (JsonProcessingException exception) {
-            logger.warn("Error getJson: {}", exception.getMessage());
-            return null;
         }
     }
 

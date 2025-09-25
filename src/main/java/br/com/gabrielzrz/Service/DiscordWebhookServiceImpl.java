@@ -1,7 +1,6 @@
 package br.com.gabrielzrz.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.gabrielzrz.Service.contract.JsonService;
 import br.com.gabrielzrz.Service.contract.DiscordWebhookService;
 import br.com.gabrielzrz.Service.contract.HttpClientService;
 import br.com.gabrielzrz.Service.contract.ParameterService;
@@ -28,12 +27,12 @@ public class DiscordWebhookServiceImpl implements DiscordWebhookService {
 
     private final HttpClientService httpClientService;
     private final ParameterService parameterService;
-    private final ObjectMapper objectMapper;
+    private final JsonService  jsonService;
 
-    public DiscordWebhookServiceImpl(HttpClientService httpClientService, ParameterService parameterService, ObjectMapper objectMapper) {
+    public DiscordWebhookServiceImpl(HttpClientService httpClientService, ParameterService parameterService, JsonService jsonService) {
         this.httpClientService = httpClientService;
         this.parameterService = parameterService;
-        this.objectMapper = objectMapper;
+        this.jsonService = jsonService;
     }
 
     private static final int LOG_ATTACHMENT_INDEX = 1;
@@ -60,7 +59,7 @@ public class DiscordWebhookServiceImpl implements DiscordWebhookService {
         httpClientService.postMultipart(
                 url,
                 List.of(
-                        new MultiPartDTO<>(toJson(webhookRequest), PAYLOAD_JSON, MediaType.TEXT_PLAIN),
+                        new MultiPartDTO<>(jsonService.toJson(webhookRequest), PAYLOAD_JSON, MediaType.TEXT_PLAIN),
                         new MultiPartDTO<>(requestPayload, "files[0]", REQUEST_BODY_TXT, MediaType.APPLICATION_OCTET_STREAM),
                         new MultiPartDTO<>(stackTraceData, "files[1]", LOG_TXT, MediaType.APPLICATION_OCTET_STREAM)
                 ));
@@ -98,16 +97,5 @@ public class DiscordWebhookServiceImpl implements DiscordWebhookService {
     private boolean isSendWebhook(String url, String requestBody) {
         EnvironmentType environmentType = parameterService.getEnvironmentType();
         return Objects.nonNull(url) && EnvironmentType.PROD.equals(environmentType) && requestBody != null;
-    }
-
-    private <T> String toJson(T json) {
-        try {
-            if (Objects.isNull(json)) {
-                return null;
-            }
-            return objectMapper.writeValueAsString(json);
-        } catch (JsonProcessingException exception) {
-            throw new RuntimeException("Failed to serialize object to JSON", exception);
-        }
     }
 }
