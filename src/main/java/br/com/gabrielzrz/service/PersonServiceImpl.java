@@ -1,7 +1,7 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.FileImportService;
-import br.com.gabrielzrz.Service.contract.PersonService;
+import br.com.gabrielzrz.service.contract.FileImportService;
+import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
 import br.com.gabrielzrz.controllers.PersonController;
 import br.com.gabrielzrz.dto.PersonDTO;

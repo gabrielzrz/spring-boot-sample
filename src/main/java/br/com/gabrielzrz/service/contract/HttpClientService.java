@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.Service.contract;
+package br.com.gabrielzrz.service.contract;
 
 import br.com.gabrielzrz.dto.MultiPartDTO;
 import br.com.gabrielzrz.enums.HttpRequestType;

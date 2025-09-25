@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.FileStorageService;
+import br.com.gabrielzrz.service.contract.FileStorageService;
 import br.com.gabrielzrz.config.FileStorageConfig;
 import br.com.gabrielzrz.exception.FileNotFoundException;
 import br.com.gabrielzrz.exception.FileStorageException;

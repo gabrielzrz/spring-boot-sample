@@ -1,7 +1,7 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.BranchService;
-import br.com.gabrielzrz.Service.contract.ParameterService;
+import br.com.gabrielzrz.service.contract.BranchService;
+import br.com.gabrielzrz.service.contract.ParameterService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
 import br.com.gabrielzrz.enums.EnvironmentType;
 import br.com.gabrielzrz.enums.ParameterType;

@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.Service.contract;
+package br.com.gabrielzrz.service.contract;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;

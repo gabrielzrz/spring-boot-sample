@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.JsonService;
+import br.com.gabrielzrz.service.contract.JsonService;
 import br.com.gabrielzrz.exception.JsonSerializationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;

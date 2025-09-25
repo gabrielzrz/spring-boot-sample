@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service.contract;
+package br.com.gabrielzrz.service.contract;
 
-import br.com.gabrielzrz.Service.FileImportServiceImpl;
+import br.com.gabrielzrz.service.FileImportServiceImpl;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import org.springframework.web.multipart.MultipartFile;
 

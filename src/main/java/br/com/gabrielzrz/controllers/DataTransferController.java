@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.controllers;
 
-import br.com.gabrielzrz.Service.contract.PersonService;
+import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.ImportStatus;
 import io.swagger.v3.oas.annotations.Operation;

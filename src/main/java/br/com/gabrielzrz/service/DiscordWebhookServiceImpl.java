@@ -1,9 +1,9 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.JsonService;
-import br.com.gabrielzrz.Service.contract.DiscordWebhookService;
-import br.com.gabrielzrz.Service.contract.HttpClientService;
-import br.com.gabrielzrz.Service.contract.ParameterService;
+import br.com.gabrielzrz.service.contract.JsonService;
+import br.com.gabrielzrz.service.contract.DiscordWebhookService;
+import br.com.gabrielzrz.service.contract.HttpClientService;
+import br.com.gabrielzrz.service.contract.ParameterService;
 import br.com.gabrielzrz.dto.MultiPartDTO;
 import br.com.gabrielzrz.dto.discord.AttachmentDiscordWebhookRequestDTO;
 import br.com.gabrielzrz.dto.discord.DiscordWebhookRequestDTO;

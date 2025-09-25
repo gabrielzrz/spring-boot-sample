@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.config;
 
-import br.com.gabrielzrz.Service.contract.ParameterService;
+import br.com.gabrielzrz.service.contract.ParameterService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

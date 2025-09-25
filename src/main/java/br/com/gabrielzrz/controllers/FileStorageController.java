@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.controllers;
 
-import br.com.gabrielzrz.Service.contract.FileStorageService;
+import br.com.gabrielzrz.service.contract.FileStorageService;
 import br.com.gabrielzrz.dto.response.UploadFileResponseDTO;
 import br.com.gabrielzrz.util.LambdaUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.Service.contract;
+package br.com.gabrielzrz.service.contract;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

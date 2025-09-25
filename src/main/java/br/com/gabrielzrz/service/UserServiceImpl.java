@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.UserService;
+import br.com.gabrielzrz.service.contract.UserService;
 import br.com.gabrielzrz.repository.jpa.UserJpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

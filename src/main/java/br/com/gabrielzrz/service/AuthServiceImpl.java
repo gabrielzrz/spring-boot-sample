@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.AuthService;
+import br.com.gabrielzrz.service.contract.AuthService;
 import br.com.gabrielzrz.exception.RequiredObjectIsNullException;
 import br.com.gabrielzrz.security.JwtTokenProvider;
 import br.com.gabrielzrz.dto.security.AccountCredentialsDTO;

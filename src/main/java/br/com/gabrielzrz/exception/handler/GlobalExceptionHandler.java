@@ -1,8 +1,8 @@
 package br.com.gabrielzrz.exception.handler;
 
-import br.com.gabrielzrz.Service.contract.JsonService;
+import br.com.gabrielzrz.service.contract.JsonService;
 import br.com.gabrielzrz.exception.*;
-import br.com.gabrielzrz.Service.contract.DiscordWebhookService;
+import br.com.gabrielzrz.service.contract.DiscordWebhookService;
 import br.com.gabrielzrz.util.SecurityContextUtil;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletRequestWrapper;

@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.HttpRequestLogService;
+import br.com.gabrielzrz.service.contract.HttpRequestLogService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
 import br.com.gabrielzrz.model.HttpRequestLog;
 import br.com.gabrielzrz.repository.port.HttpRequestLogRepositoryPort;

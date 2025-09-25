@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.BranchService;
+import br.com.gabrielzrz.service.contract.BranchService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
 import br.com.gabrielzrz.model.Branch;
 import br.com.gabrielzrz.repository.port.BranchRepositoryPort;

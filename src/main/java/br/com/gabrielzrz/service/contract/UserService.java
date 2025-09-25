@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.Service.contract;
+package br.com.gabrielzrz.service.contract;
 
 /**
  * @author Zorzi

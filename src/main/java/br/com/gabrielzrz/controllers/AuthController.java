@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.controllers;
 
-import br.com.gabrielzrz.Service.contract.AuthService;
+import br.com.gabrielzrz.service.contract.AuthService;
 import br.com.gabrielzrz.dto.security.AccountCredentialsDTO;
 import br.com.gabrielzrz.dto.security.TokenDTO;
 import io.micrometer.common.util.StringUtils;

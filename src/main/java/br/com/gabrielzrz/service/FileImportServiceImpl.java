@@ -1,6 +1,6 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.FileImportService;
+import br.com.gabrielzrz.service.contract.FileImportService;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.ImportStatus;
 import br.com.gabrielzrz.exception.BadRequestException;

@@ -1,8 +1,8 @@
-package br.com.gabrielzrz.Service;
+package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.Service.contract.JsonService;
-import br.com.gabrielzrz.Service.contract.HttpClientService;
-import br.com.gabrielzrz.Service.contract.HttpRequestLogService;
+import br.com.gabrielzrz.service.contract.JsonService;
+import br.com.gabrielzrz.service.contract.HttpClientService;
+import br.com.gabrielzrz.service.contract.HttpRequestLogService;
 import br.com.gabrielzrz.dto.MultiPartDTO;
 import br.com.gabrielzrz.enums.HttpRequestMethod;
 import br.com.gabrielzrz.enums.HttpRequestType;
