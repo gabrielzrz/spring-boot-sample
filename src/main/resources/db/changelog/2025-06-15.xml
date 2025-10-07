@@ -196,12 +196,12 @@
     <changeSet author="gabriel (generated)" id="1750035908356-21">
         <sql>
             INSERT INTO permission (id, description, created_at, "version") VALUES
-            (gen_random_uuid(), 'ADMIN', now(), 0),
-            (gen_random_uuid(), 'MANAGER', now(), 0),
-            (gen_random_uuid(), 'COMMON_USER', now(), 0);
+            (uuidv7(), 'ADMIN', now(), 0),
+            (uuidv7(), 'MANAGER', now(), 0),
+            (uuidv7(), 'COMMON_USER', now(), 0);
 
             INSERT INTO users (id, user_name, full_name, password, account_non_expired, account_non_locked, credentials_non_expired, enabled, created_at, "version") VALUES
-            (gen_random_uuid(), 'gabriel', 'Gabriel Zorzi', '{pbkdf2}f6f22c72abd6db497f6203a752c9f2a7b6fb22423163a6e20486cd774099621b62ec9ab421a5350d', true, true, true, TRUE, now(), 0);
+            (uuidv7(), 'gabriel', 'Gabriel Zorzi', '{pbkdf2}f6f22c72abd6db497f6203a752c9f2a7b6fb22423163a6e20486cd774099621b62ec9ab421a5350d', true, true, true, TRUE, now(), 0);
 
             INSERT INTO user_permission (id_user, id_permission)
             SELECT u.id, p.id

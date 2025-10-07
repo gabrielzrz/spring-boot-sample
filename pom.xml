@@ -26,6 +26,7 @@
 		<apache.commons.version>1.11.0</apache.commons.version>
 		<p6spy-spring-boot-starter.version>1.12.0</p6spy-spring-boot-starter.version>
 		<commons-collections4.version>4.5.0</commons-collections4.version>
+		<uuid-creator.version>6.1.1</uuid-creator.version>
 	</properties>
 	<dependencies>
 		<!--Spring Boot-->
@@ -35,15 +36,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <!--Spring DevTools-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
         <!--WebFlux-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,15 +62,16 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.auth0</groupId>
-			<artifactId>java-jwt</artifactId>
-			<version>${java-jwt.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <!--JWT-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
 		<!--Postgresql-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -80,10 +83,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+        <!--Hibernate Envers-->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-envers</artifactId>
 		</dependency>
+        <!--Spring Validation-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -123,16 +128,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>caffeine</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.checkerframework</groupId>
-					<artifactId>checker-qual</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!--Caffeine-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
 		<!--CSV-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -156,6 +157,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
+        </dependency>
+        <!--UUID v7 generator-->
+        <dependency>
+            <groupId>com.github.f4b6a3</groupId>
+            <artifactId>uuid-creator</artifactId>
+            <version>${uuid-creator.version}</version>
         </dependency>
 	</dependencies>
 

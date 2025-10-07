@@ -3,7 +3,6 @@ package br.com.gabrielzrz.datatransfer.importer.base;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.datatransfer.importer.contract.FileImporter;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -59,9 +58,5 @@ public abstract class BaseXlsxImporter<T> implements FileImporter<T> {
             result.setColumnHeaders(headers);
             result.setTotalColumns(quantidadeColunas);
         }
-    }
-
-    private boolean isRowValid(Row row) {
-        return row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK;
     }
 }
