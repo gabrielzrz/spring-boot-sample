@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @Entity
 @Audited
-@Table(name = "parameter", uniqueConstraints = @UniqueConstraint(name = "uk_parameter_name_branch", columnNames = {"name", "branch_id"}))
+@Table(name = "parameter", uniqueConstraints = @UniqueConstraint(name = "uk_parameter_name_branch", columnNames = {"value", "branch_id"}))
 public class Parameter extends BaseEntityVersioned implements Serializable {
 
     @Column(name = "parameter_type", length = 100, nullable = false)
