@@ -1,4 +1,12 @@
-# 🧩 Spring Boot Clean Architecture Project
+<p>
+    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/spring-icon.svg"
+       alt="Spring Boot Icon"
+       width="35"
+       style="vertical-align: middle; margin-right: 8px;"/>
+    <span style="font-size: 1.8em; font-weight: bold; vertical-align: middle;">
+        Spring Boot Clean Architecture Project
+    </span>
+</p>
 
 Este projeto é uma aplicação desenvolvida com **Spring Boot 3.5.6** e **Java 25**, estruturada segundo os princípios da **Arquitetura Limpa (Clean Architecture)**.  
 O foco principal é manter um código desacoplado, testável e de fácil manutenção, com camadas bem definidas para domínio, aplicação, infraestrutura e interfaces.
