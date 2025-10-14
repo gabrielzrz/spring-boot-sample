@@ -9,8 +9,6 @@ import br.com.gabrielzrz.model.Parameter;
  */
 public interface ParameterService {
 
-    void updateByBranch();
-
     EnvironmentType getEnvironmentType();
 
     Parameter findByParameterType(ParameterType parameterType);

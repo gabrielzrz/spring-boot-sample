@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="gabriel (generated)" id="1754958754485-2">
+    <changeSet author="gabriel (generated)" id="1754958754485-1">
         <createTable tableName="branch">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="branchPK"/>
@@ -23,7 +23,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-3">
+    <changeSet author="gabriel (generated)" id="1754958754485-2">
         <createTable tableName="branch_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -42,7 +42,7 @@
             <column name="is_headquarters" type="BOOLEAN"/>
         </createTable>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-4">
+    <changeSet author="gabriel (generated)" id="1754958754485-3">
         <createTable tableName="parameter">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="parameterPK"/>
@@ -67,7 +67,7 @@
             <column name="note" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-5">
+    <changeSet author="gabriel (generated)" id="1754958754485-4">
         <createTable tableName="parameter_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -88,28 +88,34 @@
             <column name="note" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-6">
+    <changeSet author="gabriel (generated)" id="1754958754485-5">
         <addPrimaryKey columnNames="rev, id" constraintName="branch_audPK" tableName="branch_aud"/>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-7">
+    <changeSet author="gabriel (generated)" id="1754958754485-6">
         <addPrimaryKey columnNames="rev, id" constraintName="parameter_audPK" tableName="parameter_aud"/>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-8">
+    <changeSet author="gabriel (generated)" id="1754958754485-7">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="branch_aud" constraintName="FK6jkm88122iurk8et84u29phc2" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-9">
+    <changeSet author="gabriel (generated)" id="1754958754485-8">
         <addForeignKeyConstraint baseColumnNames="branch_id" baseTableName="parameter" constraintName="FKjgi85fabp45xgjyl3ctvxbhip" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="branch" validate="true"/>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-10">
+    <changeSet author="gabriel (generated)" id="1754958754485-9">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="parameter_aud" constraintName="FKmx7hgx2ghk4jekpmcv4suqo4l" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
-    <changeSet author="gabriel (generated)" id="1754958754485-1">
-        <addNotNullConstraint columnDataType="date" columnName="birth_day" tableName="person" validate="true"/>
-    </changeSet>
-    <changeSet author="gabriel (manual)" id="1754958754485-11">
+
+    <changeSet author="gabriel (manual)" id="1754958754485-10">
         <sql>
             INSERT INTO branch (id, created_at, created_by, updated_at, updated_by, VERSION, branch_name , is_active, is_headquarters)
-            VALUES (uuidv7(), now(), NULL, NULL, NULL, 0, 'MATRIZ', TRUE, TRUE)
+            VALUES ('0199db43-594f-74cf-bdcf-5357ae18a358'::uuid, now(), '0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, NULL, NULL, 0, 'MATRIZ', TRUE, TRUE);
+
+            INSERT INTO parameter
+            (id, created_at, created_by, updated_at, updated_by, "version", parameter_type, value, data_type, branch_id, note)
+            VALUES('0199db9b-05bb-7110-ad0b-20e3741c46e0'::uuid, now(), '0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, NULL, NULL, 0, 'SYSTEM_ENVIRONMENT_TYPE', 'DEV', 'TEXT', '0199db43-594f-74cf-bdcf-5357ae18a358'::uuid, NULL);
+
+            INSERT INTO parameter
+            (id, created_at, created_by, updated_at, updated_by, "version", parameter_type, value, data_type, branch_id, note)
+            VALUES('0199db9b-05d4-7dd0-ba7e-2b1c9a8a8fea'::uuid, now(), '0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, NULL, NULL, 0, 'SYSTEM_DISCORD_WEBHOOK_URL', NULL, 'TEXT', '0199db43-594f-74cf-bdcf-5357ae18a358'::uuid, NULL);
         </sql>
     </changeSet>
 </databaseChangeLog>

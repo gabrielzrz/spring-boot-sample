@@ -6,6 +6,9 @@ import br.com.gabrielzrz.repository.jpa.PersonJpaRepository;
 import br.com.gabrielzrz.repository.port.PersonRepositoryPort;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -19,7 +22,7 @@ import java.util.UUID;
 @Component(RepositoryAdapterConstants.Jpa.PERSON)
 public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
 
-    private PersonJpaRepository personJpaRepository;
+    private final PersonJpaRepository personJpaRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -29,11 +32,13 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
     }
 
     @Override
+    @Cacheable(value = "person", key = "#id")
     public Person findById(UUID id) {
         return personJpaRepository.findById(id).orElse(null);
     }
 
     @Override
+    @CachePut(value = "person", key = "#result.id")
     public Person save(Person person) {
         return personJpaRepository.save(person);
     }
@@ -44,16 +49,19 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
     }
 
     @Override
+    @CacheEvict(value = "person", key = "#id")
     public void delete(Person person) {
         personJpaRepository.delete(person);
     }
 
     @Override
+    @CacheEvict(value = "person", key = "#id")
     public void deleteById(UUID id) {
         personJpaRepository.deleteById(id);
     }
 
     @Override
+    @CachePut(value = "person", key = "#person.id")
     public int disablePerson(UUID id) {
         return personJpaRepository.disablePerson(id);
     }
