@@ -68,5 +68,5 @@ O projeto segue os princípios da **Clean Architecture**, com uma divisão clara
 A aplicação utiliza um **Webhook do Discord** configurado para enviar logs de erro automaticamente.  
 Isso é feito através da classe anotada com `@RestControllerAdvice` que intercepta exceções globais e envia uma mensagem JSON contendo detalhes do erro via HTTP para o canal configurado.
 
-O envio é realizado **de forma assíncrona**, garantindo que o processo não bloqueie a resposta ao cliente.
+O envio é realizado **de forma assíncrona** pela annotation `@Async`, garantindo que o processo não bloqueie a resposta ao cliente.
 
