@@ -8,7 +8,7 @@
     </span>
 </p>
 
-Este projeto é uma aplicação desenvolvida com **Spring Boot 3.5.6** e **Java 25**, estruturada segundo os princípios da **Arquitetura Limpa (Clean Architecture)**.  
+Este projeto é uma aplicação desenvolvida com **Spring Boot 3.5.6** e **Java 25**, estruturada segundo os princípios da **Arquitetura Limpa (Clean Architecture)** e das boas práticas de **Clean Code**.  
 O foco principal é manter um código desacoplado, testável e de fácil manutenção, com camadas bem definidas para domínio, aplicação, infraestrutura e interfaces.
 
 ---
