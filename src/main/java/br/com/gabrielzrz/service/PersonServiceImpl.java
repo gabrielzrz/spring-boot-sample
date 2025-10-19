@@ -1,9 +1,10 @@
 package br.com.gabrielzrz.service;
 
+import br.com.gabrielzrz.dto.request.PersonRequestDTO;
+import br.com.gabrielzrz.dto.response.PersonResponseDTO;
 import br.com.gabrielzrz.service.contract.FileImportService;
 import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
-import br.com.gabrielzrz.dto.PersonDTO;
 import br.com.gabrielzrz.dto.response.ImportErrorDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.exception.ResourceNotFoundException;
@@ -49,35 +50,35 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDTO findById(UUID id) {
+    public PersonResponseDTO findById(UUID id) {
         existsPersonById(id);
         Person entity = personRepositoryPort.findById(id);
-        return personMapper.toDTO(entity);
+        return personMapper.toResponse(entity);
     }
 
     @Override
-    public Page<PersonDTO> findAll(Pageable pageable) {
+    public Page<PersonResponseDTO> findAll(Pageable pageable) {
         Page<Person> people = personRepositoryPort.findAll(pageable);
-        return people.map(personMapper::toDTO);
+        return people.map(personMapper::toResponse);
     }
 
     @Override
-    public Page<PersonDTO> findPersonByName(String name, Pageable pageable) {
+    public Page<PersonResponseDTO> findPersonByName(String name, Pageable pageable) {
         Page<Person> people = personRepositoryPort.findPeopleByName(name, pageable);
-        return people.map(personMapper::toDTO);
+        return people.map(personMapper::toResponse);
     }
 
     @Override
-    public PersonDTO create(PersonDTO personDTO) {
-        Person p = personMapper.toEntity(personDTO);
-        return personMapper.toDTO(personRepositoryPort.save(p));
+    public PersonResponseDTO create(PersonRequestDTO personRequestDTO) {
+        Person p = personMapper.toEntity(personRequestDTO);
+        return personMapper.toResponse(personRepositoryPort.save(p));
     }
 
     @Override
-    public PersonDTO update(PersonDTO personDTO) {
-        existsPersonById(personDTO.getId());
-        Person person = personRepositoryPort.save(personMapper.toEntity(personDTO));
-        return personMapper.toDTO(person);
+    public PersonResponseDTO update(PersonRequestDTO personRequestDTO) {
+        existsPersonById(personRequestDTO.getId());
+        Person person = personRepositoryPort.save(personMapper.toEntity(personRequestDTO));
+        return personMapper.toResponse(person);
     }
 
     @Override
@@ -89,15 +90,15 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public ImportResultDTO massCreation(MultipartFile file) {
-        return fileImportService.importFile(file, PersonDTO.class, this::saveImportedPeople);
+        return fileImportService.importFile(file, PersonRequestDTO.class, this::saveImportedPeople);
     }
 
     @Override
-    public PersonDTO disablePerson(UUID id) {
+    public PersonResponseDTO disablePerson(UUID id) {
         existsPersonById(id);
         personRepositoryPort.disablePerson(id);
         Person person = personRepositoryPort.findById(id);
-        return personMapper.toDTO(person);
+        return personMapper.toResponse(person);
     }
 
     private void existsPersonById(UUID id) {
@@ -106,7 +107,7 @@ public class PersonServiceImpl implements PersonService {
         }
     }
 
-    private void saveImportedPeople(List<PersonDTO> items, ImportResultDTO result) {
+    private void saveImportedPeople(List<PersonRequestDTO> items, ImportResultDTO result) {
         List<Person> people = personMapper.toEntity(items);
         try {
             int sizeSave = personRepositoryPort.saveAll(people).size();

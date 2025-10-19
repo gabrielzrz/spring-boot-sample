@@ -1,15 +1,12 @@
 package br.com.gabrielzrz.service;
 
+import br.com.gabrielzrz.dto.security.Token;
 import br.com.gabrielzrz.service.contract.AuthService;
-import br.com.gabrielzrz.exception.RequiredObjectIsNullException;
 import br.com.gabrielzrz.security.JwtTokenProvider;
-import br.com.gabrielzrz.dto.security.AccountCredentialsDTO;
-import br.com.gabrielzrz.dto.security.TokenDTO;
+import br.com.gabrielzrz.dto.security.AccountCredentials;
 import br.com.gabrielzrz.exception.UserNameNotFoundException;
 import br.com.gabrielzrz.model.User;
 import br.com.gabrielzrz.repository.jpa.UserJpaRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +24,6 @@ import java.util.Map;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserJpaRepository userJpaRepository;
@@ -39,43 +35,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenDTO signIn(AccountCredentialsDTO accountCredentialsDTO) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountCredentialsDTO.getUsername(), accountCredentialsDTO.getPassword()));
-        User user = userJpaRepository.findByUsername(accountCredentialsDTO.getUsername());
+    public Token signIn(AccountCredentials accountCredentials) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountCredentials.username(), accountCredentials.password()));
+        User user = userJpaRepository.findByUsername(accountCredentials.username());
         if (user == null) {
-            throw new UserNameNotFoundException("Usarname " + accountCredentialsDTO.getUsername() + " not found");
+            throw new UserNameNotFoundException("Usarname " + accountCredentials.username() + " not found");
         }
-        return jwtTokenProvider.createAcessToken(accountCredentialsDTO.getUsername(), user.getRoles());
+        return jwtTokenProvider.createAcessToken(accountCredentials.username(), user.getRoles());
     }
 
     @Override
-    public TokenDTO refreshToken(String username, String refreshToken) {
+    public Token refreshToken(String username, String refreshToken) {
         User user = userJpaRepository.findByUsername(username);
-        TokenDTO token;
+        Token token;
         if (user != null) {
             token = jwtTokenProvider.refreshToken(refreshToken);
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found!");
         }
         return token;
-    }
-
-    @Override
-    public AccountCredentialsDTO create(AccountCredentialsDTO user) {
-        if (user == null) {
-            throw new RequiredObjectIsNullException();
-        }
-        logger.info("Creating one new User!");
-        User entity = new User();
-        entity.setUserName(user.getUsername());
-        entity.setFullName(user.getFullname());
-        entity.setPassword(generateHashedPassword(user.getPassword()));
-        entity.setAccountNonExpired(true);
-        entity.setAccountNonLocked(true);
-        entity.setCredentialsNonExpired(true);
-        entity.setEnabled(true);
-        User dto = userJpaRepository.save(entity);
-        return new AccountCredentialsDTO(dto.getUsername(), dto.getPassword(), dto.getFullName());
     }
 
     private String generateHashedPassword(String password) {

@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.datatransfer.importer.impl;
 
-import br.com.gabrielzrz.dto.PersonDTO;
+import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.ImportErrorDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.FileType;
@@ -21,13 +21,13 @@ import java.util.List;
  * @author Zorzi
  */
 @Component
-@FileImporterFor(fileType = FileType.CSV, dtoClass = PersonDTO.class)
-public class PersonCSVImporter extends BaseCSVImporter<PersonDTO> {
+@FileImporterFor(fileType = FileType.CSV, dtoClass = PersonRequestDTO.class)
+public class PersonCSVImporter extends BaseCSVImporter<PersonRequestDTO> {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
-    protected PersonDTO mapRecordToDTO(CSVRecord line, ImportResultDTO result) {
+    protected PersonRequestDTO mapRecordToDTO(CSVRecord line, ImportResultDTO result) {
         try {
             List<String> errors = validateValues(line);
             if (!errors.isEmpty()) {
@@ -94,8 +94,8 @@ public class PersonCSVImporter extends BaseCSVImporter<PersonDTO> {
         return errors;
     }
 
-    private PersonDTO createPersonDTO(CSVRecord line) {
-        PersonDTO person = new PersonDTO();
+    private PersonRequestDTO createPersonDTO(CSVRecord line) {
+        PersonRequestDTO person = new PersonRequestDTO();
         person.setName(line.get("name"));
         person.setAddress(line.get("address"));
         person.setGender(line.get("gender"));

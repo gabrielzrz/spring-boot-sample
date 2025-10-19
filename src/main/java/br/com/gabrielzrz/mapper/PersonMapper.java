@@ -1,7 +1,8 @@
 package br.com.gabrielzrz.mapper;
 
 import br.com.gabrielzrz.config.MapStructConfig;
-import br.com.gabrielzrz.dto.PersonDTO;
+import br.com.gabrielzrz.dto.request.PersonRequestDTO;
+import br.com.gabrielzrz.dto.response.PersonResponseDTO;
 import br.com.gabrielzrz.model.Person;
 import org.mapstruct.Mapper;
 
@@ -16,18 +17,16 @@ import java.util.TreeSet;
 @Mapper(config = MapStructConfig.class)
 public interface PersonMapper {
 
-    PersonDTO toDTO(Person person);
-    Person toEntity(PersonDTO personDTO);
+    // Return Response
+    PersonResponseDTO toResponse(Person person);
+    Set<PersonResponseDTO> toResponse(Set<Person> people);
+    HashSet<PersonResponseDTO> toResponse(HashSet<Person> people);
+    TreeSet<PersonResponseDTO> toResponse(TreeSet<Person> people);
 
-    List<PersonDTO> toDTO(List<Person> people);
-    List<Person> toEntity(List<PersonDTO> personDTO);
-
-    Set<PersonDTO> toDTO(Set<Person> people);
-    Set<Person> toEntity(Set<PersonDTO> personDTO);
-
-    HashSet<PersonDTO> toDTO(HashSet<Person> people);
-    HashSet<Person> toEntity(HashSet<PersonDTO> personDTO);
-
-    TreeSet<PersonDTO> toDTO(TreeSet<Person> people);
-    TreeSet<Person> toEntity(TreeSet<PersonDTO> personDTO);
+    // Return Entity
+    Person toEntity(PersonRequestDTO personRequestDTO);
+    List<Person> toEntity(List<PersonRequestDTO> personRequestDTO);
+    Set<Person> toEntity(Set<PersonRequestDTO> personDTO);
+    HashSet<Person> toEntity(HashSet<PersonRequestDTO> personDTO);
+    TreeSet<Person> toEntity(TreeSet<PersonRequestDTO> personDTO);
 }

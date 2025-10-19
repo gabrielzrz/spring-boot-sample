@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import br.com.gabrielzrz.dto.security.TokenDTO;
+import br.com.gabrielzrz.dto.security.Token;
 import br.com.gabrielzrz.exception.InvalidJwtAuthenticationException;
 import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.PostConstruct;
@@ -51,7 +51,7 @@ public class JwtTokenProvider {
         algorithm = Algorithm.HMAC256(secretyKey.getBytes());
     }
 
-    public TokenDTO refreshToken(String refreshToken) {
+    public Token refreshToken(String refreshToken) {
         var token = "";
         if(refreshTokenContainsBearer(refreshToken)) {
             token = refreshToken.substring("Bearer ".length());
@@ -63,20 +63,20 @@ public class JwtTokenProvider {
         return createAccessToken(username, roles);
     }
 
-    public TokenDTO createAccessToken(String username, List<String> roles) {
+    public Token createAccessToken(String username, List<String> roles) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime validity = now.plus(Duration.ofMillis(validityInMilliseconds * 3));
         String accessToken = getAccessToken(username, roles, now, validity);
         String refreshToken = getRefreshToken(username, roles, now);
-        return new TokenDTO(username, true, now, validity, accessToken, refreshToken);
+        return new Token(username, now, validity, accessToken, refreshToken);
     }
 
-    public TokenDTO createAcessToken(String userName, List<String> roles) {
+    public Token createAcessToken(String userName, List<String> roles) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime validity = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
         String accessToken = getAccessToken(userName, roles, now, validity);
         String refreshToken = getRefreshToken(userName, roles, now) ;
-        return new TokenDTO(userName, true, now, validity, accessToken, refreshToken);
+        return new Token(userName, now, validity, accessToken, refreshToken);
     }
 
     public Authentication getAuthentication(String token) {

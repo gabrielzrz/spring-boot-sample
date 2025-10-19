@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.datatransfer.importer.impl;
 
-import br.com.gabrielzrz.dto.PersonDTO;
+import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.ImportErrorDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.FileType;
@@ -23,13 +23,13 @@ import java.util.Optional;
  * @author Zorzi
  */
 @Component
-@FileImporterFor(fileType = FileType.XLSX, dtoClass = PersonDTO.class)
-public class PersonXlsxImporter extends BaseXlsxImporter<PersonDTO> {
+@FileImporterFor(fileType = FileType.XLSX, dtoClass = PersonRequestDTO.class)
+public class PersonXlsxImporter extends BaseXlsxImporter<PersonRequestDTO> {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
-    protected PersonDTO mapRowToDTO(Row row, ImportResultDTO result) {
+    protected PersonRequestDTO mapRowToDTO(Row row, ImportResultDTO result) {
         try {
             List<String> errors = validateValues(row);
             if (!errors.isEmpty()) {
@@ -96,8 +96,8 @@ public class PersonXlsxImporter extends BaseXlsxImporter<PersonDTO> {
         return errors;
     }
 
-    private PersonDTO createPersonDTO(Row row) {
-        PersonDTO person = new PersonDTO();
+    private PersonRequestDTO createPersonDTO(Row row) {
+        PersonRequestDTO person = new PersonRequestDTO();
         person.setName(row.getCell(0).getStringCellValue());
         person.setAddress(row.getCell(1).getStringCellValue());
         person.setGender(row.getCell(2).getStringCellValue());

@@ -1,7 +1,7 @@
 package br.com.gabrielzrz.controllers;
 
+import br.com.gabrielzrz.dto.response.UploadFileResponse;
 import br.com.gabrielzrz.service.contract.FileStorageService;
-import br.com.gabrielzrz.dto.response.UploadFileResponseDTO;
 import br.com.gabrielzrz.util.LambdaUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class FileStorageController {
     }
 
     @PostMapping("/uploadFile")
-    public UploadFileResponseDTO uploadFile(@RequestParam("file") MultipartFile multipartFile) {
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         Objects.requireNonNull(multipartFile, "File must not be null");
         String fileName = fileStorageService.storeFile(multipartFile);
         //http://localhost:8080/api/file/downloadFile/filename...
@@ -45,11 +45,11 @@ public class FileStorageController {
                 .path("/api/file/downloadFile/")
                 .path(fileName)
                 .toUriString();
-        return new UploadFileResponseDTO(fileName, fileDownloadUri, multipartFile.getContentType(), multipartFile.getSize());
+        return new UploadFileResponse(fileName, fileDownloadUri, multipartFile.getContentType(), multipartFile.getSize());
     }
 
     @PostMapping("/uploadFiles")
-    public List<UploadFileResponseDTO> uploadMultipleFile(@RequestParam("files") MultipartFile[] multipartFiles) {
+    public List<UploadFileResponse> uploadMultipleFile(@RequestParam("files") MultipartFile[] multipartFiles) {
         Optional.ofNullable(multipartFiles).orElseThrow(() -> new IllegalArgumentException("Files is not null"));
         return LambdaUtil.mapTo(Arrays.asList(multipartFiles), this::uploadFile);
     }

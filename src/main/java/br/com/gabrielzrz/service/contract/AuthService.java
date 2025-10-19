@@ -1,16 +1,14 @@
 package br.com.gabrielzrz.service.contract;
 
-import br.com.gabrielzrz.dto.security.AccountCredentialsDTO;
-import br.com.gabrielzrz.dto.security.TokenDTO;
+import br.com.gabrielzrz.dto.security.AccountCredentials;
+import br.com.gabrielzrz.dto.security.Token;
 
 /**
  * @author Zorzi
  */
 public interface AuthService {
 
-    TokenDTO signIn(AccountCredentialsDTO accountCredentialsDTO);
+    Token signIn(AccountCredentials accountCredentials);
 
-    TokenDTO refreshToken(String username, String refreshToken);
-
-    AccountCredentialsDTO create(AccountCredentialsDTO user);
+    Token refreshToken(String username, String refreshToken);
 }
