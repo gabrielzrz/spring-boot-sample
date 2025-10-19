@@ -3,6 +3,7 @@ package br.com.gabrielzrz.service.contract;
 import br.com.gabrielzrz.dto.PersonDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.model.Person;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -17,11 +18,11 @@ public interface PersonService {
 
     PersonDTO findById(UUID id);
 
-    PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable);
+    Page<PersonDTO> findAll(Pageable pageable);
 
-    PagedModel<EntityModel<PersonDTO>> findPersonByName(String name, Pageable pageable);
+    Page<PersonDTO> findPersonByName(String name, Pageable pageable);
 
-    Person create(PersonDTO person);
+    PersonDTO create(PersonDTO person);
 
     PersonDTO update(PersonDTO person);
 

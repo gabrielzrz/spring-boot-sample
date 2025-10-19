@@ -3,7 +3,6 @@ package br.com.gabrielzrz.service;
 import br.com.gabrielzrz.service.contract.FileImportService;
 import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
-import br.com.gabrielzrz.controllers.PersonController;
 import br.com.gabrielzrz.dto.PersonDTO;
 import br.com.gabrielzrz.dto.response.ImportErrorDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
@@ -19,19 +18,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author Zorzi
@@ -42,18 +33,16 @@ public class PersonServiceImpl implements PersonService {
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     private final PersonRepositoryPort personRepositoryPort;
-    private final PagedResourcesAssembler<PersonDTO> assembler;
     private final ExceptionMessageParser exceptionMessageParser;
     private final FileImportService fileImportService;
     private final PersonMapper personMapper;
 
     public PersonServiceImpl(
             @Qualifier(RepositoryAdapterConstants.Jpa.PERSON) PersonRepositoryPort personRepositoryPort,
-            PagedResourcesAssembler<PersonDTO> assembler,
             ExceptionMessageParser exceptionMessageParser,
-            FileImportService fileImportService, PersonMapper personMapper) {
+            FileImportService fileImportService,
+            PersonMapper personMapper) {
         this.personRepositoryPort = personRepositoryPort;
-        this.assembler = assembler;
         this.exceptionMessageParser = exceptionMessageParser;
         this.fileImportService = fileImportService;
         this.personMapper = personMapper;
@@ -63,28 +52,25 @@ public class PersonServiceImpl implements PersonService {
     public PersonDTO findById(UUID id) {
         existsPersonById(id);
         Person entity = personRepositoryPort.findById(id);
-        PersonDTO dto = personMapper.toDTO(entity);
-        return addHateoasLink(dto);
+        return personMapper.toDTO(entity);
     }
 
     @Override
-    public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) {
+    public Page<PersonDTO> findAll(Pageable pageable) {
         Page<Person> people = personRepositoryPort.findAll(pageable);
-        Page<PersonDTO> peopleDTO = people.map(personMapper::toDTO);
-        return assembler.toModel(peopleDTO, createLinkHAL(pageable));
+        return people.map(personMapper::toDTO);
     }
 
     @Override
-    public PagedModel<EntityModel<PersonDTO>> findPersonByName(String name, Pageable pageable) {
+    public Page<PersonDTO> findPersonByName(String name, Pageable pageable) {
         Page<Person> people = personRepositoryPort.findPeopleByName(name, pageable);
-        Page<PersonDTO> peopleDTO = people.map(personMapper::toDTO);
-        return assembler.toModel(peopleDTO, createLinkHAL(pageable));
+        return people.map(personMapper::toDTO);
     }
 
     @Override
-    public Person create(PersonDTO person) {
-        Person p = personMapper.toEntity(person);
-        return personRepositoryPort.save(p);
+    public PersonDTO create(PersonDTO personDTO) {
+        Person p = personMapper.toEntity(personDTO);
+        return personMapper.toDTO(personRepositoryPort.save(p));
     }
 
     @Override
@@ -111,8 +97,7 @@ public class PersonServiceImpl implements PersonService {
         existsPersonById(id);
         personRepositoryPort.disablePerson(id);
         Person person = personRepositoryPort.findById(id);
-        PersonDTO dto = personMapper.toDTO(person);
-        return addHateoasLink(dto);
+        return personMapper.toDTO(person);
     }
 
     private void existsPersonById(UUID id) {
@@ -162,21 +147,5 @@ public class PersonServiceImpl implements PersonService {
                 result.addError(new ImportErrorDTO("Erro inesperado: " + e.getMessage(), person.getName()));
             }
         }
-    }
-
-    private PersonDTO addHateoasLink(PersonDTO dto) {
-        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).findAll(null, null, "ASC")).withRel("findAll").withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
-        dto.add(linkTo(methodOn(PersonController.class).udpate(dto)).withRel("update").withType("PUT"));
-        return dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
-    }
-
-    private Link createLinkHAL(Pageable pageable) {
-        return WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder
-                .methodOn(PersonController.class)
-                .findAll(pageable.getPageNumber(), pageable.getPageSize(), String.valueOf(pageable.getSort())))
-                .withSelfRel();
     }
 }
