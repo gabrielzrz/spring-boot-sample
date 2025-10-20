@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.controllers;
 
-import br.com.gabrielzrz.assembler.PersonModelAssembler;
+import br.com.gabrielzrz.controllers.assembler.PersonModelAssembler;
 import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;

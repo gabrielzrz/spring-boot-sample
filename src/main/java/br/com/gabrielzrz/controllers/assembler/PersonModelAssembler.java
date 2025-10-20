@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.assembler;
+package br.com.gabrielzrz.controllers.assembler;
 
 import br.com.gabrielzrz.controllers.PersonController;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
