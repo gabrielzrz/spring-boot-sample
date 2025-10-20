@@ -1,7 +1,9 @@
 package br.com.gabrielzrz.service;
 
+import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
+import br.com.gabrielzrz.repository.specification.PersonSpecification;
 import br.com.gabrielzrz.service.contract.FileImportService;
 import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
@@ -19,6 +21,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,14 +60,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Page<PersonResponseDTO> findAll(Pageable pageable) {
-        Page<Person> people = personRepositoryPort.findAll(pageable);
+    public Page<PersonResponseDTO> findAll(PersonFilterRequest personFilterRequest, Pageable pageable) {
+        Specification<Person> spec = PersonSpecification.withFilters(personFilterRequest);
+        Page<Person> people = personRepositoryPort.findAll(spec, pageable);
         return people.map(personMapper::toResponse);
     }
 
     @Override
-    public Page<PersonResponseDTO> findPersonByName(String name, Pageable pageable) {
-        Page<Person> people = personRepositoryPort.findPeopleByName(name, pageable);
+    public Page<PersonResponseDTO> findAll(Pageable pageable) {
+        Page<Person> people = personRepositoryPort.findAll(pageable);
         return people.map(personMapper::toResponse);
     }
 
@@ -75,17 +79,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponseDTO update(PersonRequestDTO personRequestDTO) {
+    public void update(PersonRequestDTO personRequestDTO) {
         existsPersonById(personRequestDTO.getId());
-        Person person = personRepositoryPort.save(personMapper.toEntity(personRequestDTO));
-        return personMapper.toResponse(person);
+        personRepositoryPort.save(personMapper.toEntity(personRequestDTO));
     }
 
     @Override
     public void delete(UUID id) {
         existsPersonById(id);
-        Person entity = personRepositoryPort.findById(id);
-        personRepositoryPort.delete(entity);
+        personRepositoryPort.deleteById(id);
     }
 
     @Override

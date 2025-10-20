@@ -1,6 +1,5 @@
 package br.com.gabrielzrz.service;
 
-import br.com.gabrielzrz.service.contract.BranchService;
 import br.com.gabrielzrz.service.contract.ParameterService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
 import br.com.gabrielzrz.enums.EnvironmentType;
@@ -18,13 +17,10 @@ import org.springframework.stereotype.Service;
 public class ParameterServiceImpl implements ParameterService {
 
     private final ParameterRepositoryPort parameterRepositoryPort;
-    private final BranchService branchService;
 
     public ParameterServiceImpl(
-            @Qualifier(RepositoryAdapterConstants.Jpa.PARAMETER) ParameterRepositoryPort parameterRepositoryPort,
-            BranchService branchService) {
+            @Qualifier(RepositoryAdapterConstants.Jpa.PARAMETER) ParameterRepositoryPort parameterRepositoryPort) {
         this.parameterRepositoryPort = parameterRepositoryPort;
-        this.branchService = branchService;
     }
 
     @Override

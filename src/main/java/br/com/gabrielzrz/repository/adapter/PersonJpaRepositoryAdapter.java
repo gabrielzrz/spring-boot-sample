@@ -1,6 +1,7 @@
 package br.com.gabrielzrz.repository.adapter;
 
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
+import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.model.Person;
 import br.com.gabrielzrz.repository.jpa.PersonJpaRepository;
 import br.com.gabrielzrz.repository.port.PersonRepositoryPort;
@@ -11,6 +12,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -44,14 +46,18 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
     }
 
     @Override
-    public List<Person> saveAll(List<Person> people) {
-         return personJpaRepository.saveAll(people);
+    public Page<Person> findAll(Specification<Person> specification, Pageable pageable) {
+        return personJpaRepository.findAll(specification, pageable);
     }
 
     @Override
-    @CacheEvict(value = "person", key = "#id")
-    public void delete(Person person) {
-        personJpaRepository.delete(person);
+    public Page<Person> findAll(Pageable pageable) {
+        return personJpaRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Person> saveAll(List<Person> people) {
+         return personJpaRepository.saveAll(people);
     }
 
     @Override
@@ -62,27 +68,13 @@ public class PersonJpaRepositoryAdapter implements PersonRepositoryPort {
 
     @Override
     @CachePut(value = "person", key = "#person.id")
-    public int disablePerson(UUID id) {
-        return personJpaRepository.disablePerson(id);
+    public void disablePerson(UUID id) {
+        personJpaRepository.disablePerson(id);
     }
 
-    @Override
-    public Page<Person> findAll(Pageable pageable) {
-        return personJpaRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<Person> findAll() {
-        return personJpaRepository.findAll();
-    }
 
     @Override
     public boolean existsById(UUID uuid) {
         return personJpaRepository.existsById(uuid);
-    }
-
-    @Override
-    public Page<Person> findPeopleByName(String name, Pageable pageable) {
-        return personJpaRepository.findPeopleByName(name, pageable);
     }
 }

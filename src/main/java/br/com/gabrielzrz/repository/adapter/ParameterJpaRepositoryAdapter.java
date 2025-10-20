@@ -31,13 +31,8 @@ public class ParameterJpaRepositoryAdapter implements ParameterRepositoryPort {
     }
 
     @Override
-    public Page<Parameter> findAll(Pageable pageable) {
+    public Page<Parameter> findAll(Pageable pageable, UUID branchId) {
         return parameterRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<Parameter> findAll() {
-        return parameterRepository.findAll();
     }
 
     @Override
@@ -48,31 +43,6 @@ public class ParameterJpaRepositoryAdapter implements ParameterRepositoryPort {
     @Override
     public Parameter save(Parameter entity) {
         return parameterRepository.save(entity);
-    }
-
-    @Override
-    public List<Parameter> saveAll(List<Parameter> entities) {
-        return parameterRepository.saveAll(entities);
-    }
-
-    @Override
-    public void delete(Parameter entity) {
-        parameterRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteById(UUID uuid) {
-        parameterRepository.deleteById(uuid);
-    }
-
-    @Override
-    public Page<Parameter> findAllByBranchId(UUID branchId, Pageable pageable) {
-        return parameterRepository.findAllByBranchId(branchId, pageable);
-    }
-
-    @Override
-    public List<Parameter> findAllByBranchId(UUID branchId) {
-        return parameterRepository.findAllByBranchId(branchId);
     }
 
     @Override

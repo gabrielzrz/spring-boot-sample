@@ -33,8 +33,9 @@ public class BranchJpaRepositoryAdapter implements BranchRepositoryPort {
         return branchRepository.findAll(pageable);
     }
 
-    public List<Branch> findAll() {
-        return branchRepository.findAll();
+    @Override
+    public Branch save(Branch branch) {
+        return branchRepository.save(branch);
     }
 
     @Override
@@ -43,22 +44,7 @@ public class BranchJpaRepositoryAdapter implements BranchRepositoryPort {
     }
 
     @Override
-    public Branch save(Branch entity) {
-        return branchRepository.save(entity);
-    }
-
-    @Override
-    public List<Branch> saveAll(List<Branch> entities) {
-        return branchRepository.saveAll(entities);
-    }
-
-    @Override
-    public void delete(Branch entity) {
-        branchRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteById(UUID uuid) {
-        branchRepository.deleteById(uuid);
+    public List<Branch> findAll() {
+        return branchRepository.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package br.com.gabrielzrz.service.contract;
 
+import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
@@ -16,13 +17,13 @@ public interface PersonService {
 
     PersonResponseDTO findById(UUID id);
 
-    Page<PersonResponseDTO> findAll(Pageable pageable);
+    Page<PersonResponseDTO> findAll(PersonFilterRequest personFilterRequest, Pageable pageable);
 
-    Page<PersonResponseDTO> findPersonByName(String name, Pageable pageable);
+    Page<PersonResponseDTO> findAll(Pageable pageable);
 
     PersonResponseDTO create(PersonRequestDTO personRequestDTO);
 
-    PersonResponseDTO update(PersonRequestDTO personRequestDTO);
+    void update(PersonRequestDTO personRequestDTO);
 
     void delete(UUID id);
 

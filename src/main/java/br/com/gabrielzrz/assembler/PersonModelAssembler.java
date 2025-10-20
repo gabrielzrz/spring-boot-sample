@@ -21,15 +21,15 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
                 linkTo(methodOn(PersonController.class).findById(entity.getId()))
                         .withSelfRel()
                         .withType("GET"),
-                linkTo(methodOn(PersonController.class).findAll(null, null, "ASC"))
+                linkTo(methodOn(PersonController.class).findAll(null, null))
                         .withRel("findAll")
                         .withType("GET"),
-//                linkTo(methodOn(PersonController.class).create(entity))
-//                        .withRel("create")
-//                        .withType("POST"),
-//                linkTo(methodOn(PersonController.class).update(entity))
-//                        .withRel("update")
-//                        .withType("PUT"),
+                linkTo(methodOn(PersonController.class).create(null))
+                        .withRel("create")
+                        .withType("POST"),
+                linkTo(methodOn(PersonController.class).update(null))
+                        .withRel("update")
+                        .withType("PUT"),
                 linkTo(methodOn(PersonController.class).delete(entity.getId()))
                         .withRel("delete")
                         .withType("DELETE")

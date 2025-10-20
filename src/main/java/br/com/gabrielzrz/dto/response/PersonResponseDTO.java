@@ -1,5 +1,7 @@
 package br.com.gabrielzrz.dto.response;
 
+import org.springframework.hateoas.server.core.Relation;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -8,6 +10,7 @@ import java.util.UUID;
 /**
  * @author Zorzi
  */
+@Relation(collectionRelation = "people")
 public class PersonResponseDTO implements Serializable {
 
     @Serial
