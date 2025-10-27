@@ -26,6 +26,17 @@ public class PersonResponseDTO implements Serializable {
 
     private LocalDate birthDay;
 
+    public PersonResponseDTO() {
+    }
+
+    public PersonResponseDTO(UUID id, String name, String address, String gender, LocalDate birthDay) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
+        this.birthDay = birthDay;
+    }
+
     // Getters && Setters
     public UUID getId() {
         return id;
