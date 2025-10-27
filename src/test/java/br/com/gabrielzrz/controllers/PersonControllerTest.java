@@ -2,8 +2,6 @@ package br.com.gabrielzrz.controllers;
 
 import br.com.gabrielzrz.controllers.assembler.PersonModelAssembler;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
-import br.com.gabrielzrz.exception.handler.GlobalExceptionHandler;
-import br.com.gabrielzrz.service.contract.DiscordWebhookService;
 import br.com.gabrielzrz.service.contract.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
