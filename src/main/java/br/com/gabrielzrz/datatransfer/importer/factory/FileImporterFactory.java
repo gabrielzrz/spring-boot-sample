@@ -1,15 +1,15 @@
 package br.com.gabrielzrz.datatransfer.importer.factory;
 
 import br.com.gabrielzrz.enums.FileType;
-import br.com.gabrielzrz.exception.BadRequestException;
 import br.com.gabrielzrz.annotation.FileImporterFor;
-import br.com.gabrielzrz.datatransfer.importer.contract.ImporterKey;
 import br.com.gabrielzrz.datatransfer.importer.contract.FileImporter;
+import br.com.gabrielzrz.exception.FileImporterException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Zorzi
@@ -24,13 +24,12 @@ public class FileImporterFactory {
         initializeImporters(allImporters);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> FileImporter<T> getImporter(String fileName, Class<T> dtoClass) {
         FileType fileType = FileType.fromFileName(fileName);
         ImporterKey key = new ImporterKey(fileType, dtoClass);
         FileImporter<?> importer = importers.get(key);
         if (importer == null) {
-            throw new BadRequestException("Importer não encontrado para " + fileType + " com tipo " + dtoClass.getSimpleName());
+            throw new FileImporterException("Importer not found for " + fileType + " with type " + dtoClass.getSimpleName());
         }
         return (FileImporter<T>) importer;
     }
@@ -44,9 +43,9 @@ public class FileImporterFactory {
 
     private ImporterKey extractKeyFromImporter(FileImporter<?> importer) {
         FileImporterFor annotation = importer.getClass().getAnnotation(FileImporterFor.class);
-        if (annotation != null) {
-            return new ImporterKey(annotation.fileType(), annotation.dtoClass());
-        }
-        throw new IllegalStateException("Importer deve ter anotação @FileImporterFor");
+        return Optional.ofNullable(annotation)
+                .map(a -> new ImporterKey(a.fileType(), a.dtoClass()))
+                .orElseThrow(() -> new FileImporterException("Importer must have the @FileImporterFor annotation"));
+
     }
 }

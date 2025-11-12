@@ -1,5 +1,8 @@
 package br.com.gabrielzrz.exception;
 
+/**
+ * @author Zorzi
+ */
 public class FileStorageException extends RuntimeException {
     public FileStorageException(String message) {
         super(message);

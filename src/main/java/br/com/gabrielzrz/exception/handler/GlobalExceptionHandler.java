@@ -1,5 +1,6 @@
 package br.com.gabrielzrz.exception.handler;
 
+import br.com.gabrielzrz.dto.response.ExceptionResponse;
 import br.com.gabrielzrz.service.contract.JsonService;
 import br.com.gabrielzrz.exception.*;
 import br.com.gabrielzrz.service.contract.DiscordWebhookService;
@@ -10,17 +11,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
-
 
 /**
  * @author Zorzi
@@ -66,12 +71,39 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(httpStatus).body(response);
     }
 
-    @ExceptionHandler({RequiredObjectIsNullException.class, BadRequestException.class})
+    @ExceptionHandler({BadRequestException.class, FileImporterException.class})
     public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception exception, HttpServletRequest request) {
         String url = request.getRequestURI();
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         logUnexpectedError(exception, url, httpStatus, request);
         ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    public final ResponseEntity<ExceptionResponse> handleUnauthorizedException(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        logUnexpectedError(exception, url, httpStatus, request);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        String url = request.getContextPath();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        logUnexpectedError(ex, url, httpStatus, null);
+        StringBuilder erros = new StringBuilder();
+        ex.getBindingResult().getFieldErrors().forEach(
+                error -> erros.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
+        );
+        ExceptionResponse response = new ExceptionResponse(
+                url,
+                httpStatus,
+                httpStatus.value(),
+                "Request is missing required fields: please provide all necessary arguments.",
+                erros.toString());
         return ResponseEntity.status(httpStatus).body(response);
     }
 

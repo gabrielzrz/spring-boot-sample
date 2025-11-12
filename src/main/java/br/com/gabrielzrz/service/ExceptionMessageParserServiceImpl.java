@@ -1,16 +1,17 @@
-package br.com.gabrielzrz.util;
+package br.com.gabrielzrz.service;
 
+import br.com.gabrielzrz.service.contract.ExceptionMessageParserService;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 /**
  * @author Zorzi
  */
-@Component
-public class ExceptionMessageParser {
+@Service
+public class ExceptionMessageParserServiceImpl implements ExceptionMessageParserService {
 
     public String parseDataIntegrityError(DataIntegrityViolationException e) {
         String message = e.getMostSpecificCause().getMessage().toLowerCase();
@@ -23,7 +24,7 @@ public class ExceptionMessageParser {
         } else if (message.contains("data too long")) {
             return extractDataTooLongError(message);
         } else if (message.contains("check constraint")) {
-            return extractCheckConstraintError(message);
+            return extractCheckConstraintError();
         } else {
             return "Violação de integridade dos dados: " + e.getMostSpecificCause().getMessage();
         }
@@ -99,7 +100,7 @@ public class ExceptionMessageParser {
     /**
      * Extrai informação específica de check constraint
      */
-    private String extractCheckConstraintError(String message) {
+    private String extractCheckConstraintError() {
         return "Valor inválido para o campo - não atende às regras de negócio";
     }
 
@@ -117,29 +118,15 @@ public class ExceptionMessageParser {
      */
     private String formatMultipleValidationErrors(Set<ConstraintViolation<?>> violations) {
         StringBuilder sb = new StringBuilder("Erros de validação: ");
-        violations.forEach(violation -> {
+        violations.forEach(violation ->
             sb.append(violation.getPropertyPath().toString())
                     .append(" (")
                     .append(violation.getMessage())
-                    .append("), ");
-        });
+                    .append("), ")
+        );
         if (sb.length() > 2) {
             sb.setLength(sb.length() - 2);
         }
         return sb.toString();
-    }
-
-    /**
-     * Método genérico para qualquer Exception
-     */
-    public String parseGenericException(Exception e) {
-        if (e instanceof DataIntegrityViolationException) {
-            return parseDataIntegrityError((DataIntegrityViolationException) e);
-        } else if (e instanceof jakarta.validation.ConstraintViolationException) {
-            jakarta.validation.ConstraintViolationException cve = (jakarta.validation.ConstraintViolationException) e;
-            return parseValidationErrors(cve.getConstraintViolations());
-        } else {
-            return "Erro inesperado: " + e.getMessage();
-        }
     }
 }

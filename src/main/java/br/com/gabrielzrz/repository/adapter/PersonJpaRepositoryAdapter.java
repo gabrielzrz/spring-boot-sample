@@ -1,7 +1,6 @@
 package br.com.gabrielzrz.repository.adapter;
 
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
-import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.model.Person;
 import br.com.gabrielzrz.repository.jpa.PersonJpaRepository;
 import br.com.gabrielzrz.repository.port.PersonRepositoryPort;

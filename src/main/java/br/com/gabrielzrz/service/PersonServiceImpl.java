@@ -4,6 +4,7 @@ import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
 import br.com.gabrielzrz.repository.specification.PersonSpecification;
+import br.com.gabrielzrz.service.contract.ExceptionMessageParserService;
 import br.com.gabrielzrz.service.contract.FileImportService;
 import br.com.gabrielzrz.service.contract.PersonService;
 import br.com.gabrielzrz.constants.RepositoryAdapterConstants;
@@ -13,7 +14,6 @@ import br.com.gabrielzrz.exception.ResourceNotFoundException;
 import br.com.gabrielzrz.mapper.PersonMapper;
 import br.com.gabrielzrz.model.Person;
 import br.com.gabrielzrz.repository.port.PersonRepositoryPort;
-import br.com.gabrielzrz.util.ExceptionMessageParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,18 +36,17 @@ public class PersonServiceImpl implements PersonService {
 
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
+    private final ExceptionMessageParserService exceptionMessageParserService;
     private final PersonRepositoryPort personRepositoryPort;
-    private final ExceptionMessageParser exceptionMessageParser;
     private final FileImportService fileImportService;
     private final PersonMapper personMapper;
 
     public PersonServiceImpl(
-            @Qualifier(RepositoryAdapterConstants.Jpa.PERSON) PersonRepositoryPort personRepositoryPort,
-            ExceptionMessageParser exceptionMessageParser,
+            ExceptionMessageParserService exceptionMessageParserService, @Qualifier(RepositoryAdapterConstants.Jpa.PERSON) PersonRepositoryPort personRepositoryPort,
             FileImportService fileImportService,
             PersonMapper personMapper) {
+        this.exceptionMessageParserService = exceptionMessageParserService;
         this.personRepositoryPort = personRepositoryPort;
-        this.exceptionMessageParser = exceptionMessageParser;
         this.fileImportService = fileImportService;
         this.personMapper = personMapper;
     }
@@ -128,12 +127,12 @@ public class PersonServiceImpl implements PersonService {
             } catch (DataIntegrityViolationException e) {
                 // Violação de integridade (chave duplicada, FK, etc.)
                 result.incrementFailed();
-                String errorMessage = exceptionMessageParser.parseDataIntegrityError(e);
+                String errorMessage = exceptionMessageParserService.parseDataIntegrityError(e);
                 result.addError(new ImportErrorDTO(errorMessage, person.getName()));
             } catch (jakarta.validation.ConstraintViolationException e) {
                 // Violação de validação Bean Validation (@NotNull, @Size, etc.)
                 result.incrementFailed();
-                String errorMessage = exceptionMessageParser.parseValidationErrors(e.getConstraintViolations());
+                String errorMessage = exceptionMessageParserService.parseValidationErrors(e.getConstraintViolations());
                 result.addError(new ImportErrorDTO(errorMessage, person.getName()));
             } catch (org.hibernate.exception.ConstraintViolationException e) {
                 // Violação de constraint do banco (Hibernate)

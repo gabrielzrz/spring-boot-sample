@@ -1,4 +1,4 @@
-package br.com.gabrielzrz.datatransfer.importer.contract;
+package br.com.gabrielzrz.datatransfer.importer.factory;
 
 import br.com.gabrielzrz.enums.FileType;
 
