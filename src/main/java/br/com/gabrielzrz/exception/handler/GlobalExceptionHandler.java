@@ -143,10 +143,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (isNull(request)) {
             return "{}";
         }
-        String requestBody = findWrapper(request)
+        return findWrapper(request)
                 .map(wrapper -> new String(wrapper.getContentAsByteArray()))
                 .orElse("{}");
-        return jsonService.readTree(requestBody).toString();
     }
 
     private Optional<ContentCachingRequestWrapper> findWrapper(ServletRequest request) {

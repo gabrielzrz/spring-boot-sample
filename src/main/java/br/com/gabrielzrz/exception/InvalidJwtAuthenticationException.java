@@ -11,4 +11,8 @@ public class InvalidJwtAuthenticationException extends AuthenticationException {
     public InvalidJwtAuthenticationException(String message) {
         super(message);
     }
+
+    public InvalidJwtAuthenticationException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
+		<version>4.0.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.gabrielzrz</groupId>
@@ -20,7 +20,7 @@
 		<resource.dir>${basedir}/src/main/resources</resource.dir>
 		<javassist.version>3.30.2-GA</javassist.version>
 		<liquibase.version>4.27.0</liquibase.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.9</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.0.1</springdoc-openapi-starter-webmvc-ui.version>
 		<java-jwt.version>4.5.0</java-jwt.version>
 		<apache.poi.version>5.2.5</apache.poi.version>
 		<apache.commons.version>1.11.0</apache.commons.version>
@@ -78,7 +78,7 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!--JPA-->
+		<!--Spring Data-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -106,16 +106,8 @@
 		</dependency>
 		<!--Jackson-->
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<groupId>tools.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-yaml</artifactId>
 		</dependency>
 		<!--OpenAPI-->
 		<dependency>

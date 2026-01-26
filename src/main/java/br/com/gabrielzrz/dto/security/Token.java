@@ -1,5 +1,7 @@
 package br.com.gabrielzrz.dto.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ public record Token(
 
         LocalDateTime expiration,
 
+//        @JsonInclude(JsonInclude.Include.NON_NULL)
         String accessToken,
 
         String refreshToken

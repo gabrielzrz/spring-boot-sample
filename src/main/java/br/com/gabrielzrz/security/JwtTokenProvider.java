@@ -76,7 +76,7 @@ public class JwtTokenProvider {
         LocalDateTime validity = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
         String accessToken = getAccessToken(userName, roles, now, validity);
         String refreshToken = getRefreshToken(userName, roles, now) ;
-        return new Token(userName, now, validity, accessToken, refreshToken);
+        return new Token(userName, now, validity, null, refreshToken);
     }
 
     public Authentication getAuthentication(String token) {
@@ -97,12 +97,9 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
         try {
-            if (decodedJWT.getExpiresAt().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or Invalid JWT Token");
+            return !decodedJWT.getExpiresAt().before(new Date());
+        } catch (Exception exception) {
+            throw new InvalidJwtAuthenticationException("Expired or Invalid JWT Token", exception);
         }
     }
 

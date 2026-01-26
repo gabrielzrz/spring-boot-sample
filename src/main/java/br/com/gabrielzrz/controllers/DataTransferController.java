@@ -29,7 +29,7 @@ public class DataTransferController {
     }
 
     @PostMapping(value = "/importPeople",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Massive people creation with upload of XLSX or CSV")
     public ResponseEntity<ImportResultDTO> importPeople(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {

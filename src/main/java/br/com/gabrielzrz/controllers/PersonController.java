@@ -42,7 +42,7 @@ public class PersonController {
     }
 
     //GET
-    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Find by ID")
     public ResponseEntity<EntityModel<PersonResponseDTO>> findById(@PathVariable("id") UUID id) {
         PersonResponseDTO personResponseDTO = personService.findById(id);
@@ -51,16 +51,16 @@ public class PersonController {
 
     //POST
     @PostMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Create Person")
     public ResponseEntity<PersonResponseDTO> create(@Valid @RequestBody PersonRequestDTO personRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(personRequestDTO));
     }
 
     @PostMapping(value = "/search",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Find all people")
     public ResponseEntity<PagedModel<EntityModel<PersonResponseDTO>>> findAll(@RequestBody PersonFilterRequest personFilterRequest, Pageable pageable) {
         Page<PersonResponseDTO> peoplePage = personService.findAll(personFilterRequest, pageable);
@@ -69,8 +69,8 @@ public class PersonController {
 
     //PUT
     @PutMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Update Person")
     public ResponseEntity<Void> update(@Valid @RequestBody PersonRequestDTO personRequestDTO) {
         personService.update(personRequestDTO);
@@ -78,7 +78,7 @@ public class PersonController {
     }
 
     //DELETE
-    @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "delete person")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         personService.delete(id);

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestLogController {
 
-    private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(TestLogController.class.getName());
 
     @GetMapping("/test")
     public String testLog() {
@@ -22,5 +22,4 @@ public class TestLogController {
         logger.error("this is an ERROR log");
         return "Logs generated successfully!";
     }
-
 }
