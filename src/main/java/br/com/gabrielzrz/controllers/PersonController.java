@@ -44,9 +44,9 @@ public class PersonController {
     //GET
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Find by ID")
-    public ResponseEntity<EntityModel<PersonResponseDTO>> findById(@PathVariable("id") UUID id) {
+    public ResponseEntity<PersonResponseDTO> findById(@PathVariable("id") UUID id) {
         PersonResponseDTO personResponseDTO = personService.findById(id);
-        return ResponseEntity.ok(personModelAssembler.toModel(personResponseDTO));
+        return ResponseEntity.ok(personResponseDTO);
     }
 
     //POST

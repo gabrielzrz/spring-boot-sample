@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,15 +28,17 @@ public class AuthController {
 
     //POST
     @Operation(summary = "Authenticates an user and returns a token")
-    @PostMapping("/signin")
-    public ResponseEntity<Token> signin(@Valid @RequestBody AccountCredentials accountCredentialsDTO) {
+    @PostMapping(value = "/signin",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Token> signing(@Valid @RequestBody AccountCredentials accountCredentialsDTO) {
         Token token = authService.signIn(accountCredentialsDTO);
         return ResponseEntity.ok().body(token);
     }
 
     //PUT
     @PutMapping("/refresh/{username}")
-    public ResponseEntity<Token> refreshToken(@PathVariable("username") String username, @RequestHeader("Authorization") String refreshToken) {
+    public ResponseEntity<Token> refreshToken(@PathVariable String username, @RequestHeader("Authorization") String refreshToken) {
         if (parametersAreInvalid(username, refreshToken)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
