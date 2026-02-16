@@ -2,11 +2,10 @@ package br.com.gabrielzrz.service;
 
 import br.com.gabrielzrz.service.contract.JsonService;
 import br.com.gabrielzrz.exception.JsonSerializationException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.lang.reflect.Type;
 
@@ -19,16 +18,16 @@ public class JsonServiceImpl implements JsonService {
     private static final String SERIALIZE_ERROR = "Failed to serialize object to JSON";
     private static final String DESERIALIZE_ERROR = "Failed to deserialize JSON";
     private static final String PARSE_ERROR = "Failed to parse JSON string";
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
-    public JsonServiceImpl(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public JsonServiceImpl(JsonMapper jsonMapper) {
+        this.jsonMapper = jsonMapper;
     }
 
     @Override
     public String toJson(Object obj) {
         try {
-            return objectMapper.writeValueAsString(obj);
+            return jsonMapper.writeValueAsString(obj);
         } catch (Exception exception) {
             throw new JsonSerializationException(SERIALIZE_ERROR, exception);
         }
@@ -37,16 +36,7 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public <T> T fromJson(String json, Class<T> clazz) {
         try {
-            return objectMapper.readValue(json, clazz);
-        } catch (Exception exception) {
-            throw new JsonSerializationException(DESERIALIZE_ERROR, exception);
-        }
-    }
-
-    @Override
-    public <T> T fromJson(String json, TypeReference<T> typeReference) {
-        try {
-            return objectMapper.readValue(json, typeReference);
+            return jsonMapper.readValue(json, clazz);
         } catch (Exception exception) {
             throw new JsonSerializationException(DESERIALIZE_ERROR, exception);
         }
@@ -55,8 +45,8 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public <T> T fromJson(String json, Type type) {
         try {
-            JavaType javaType = objectMapper.constructType(type);
-            return objectMapper.readValue(json, javaType);
+            JavaType javaType = jsonMapper.constructType(type);
+            return jsonMapper.readValue(json, javaType);
         } catch (Exception exception) {
             throw new JsonSerializationException(DESERIALIZE_ERROR, exception);
         }
@@ -65,7 +55,7 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JsonNode readTree(String json) {
         try {
-            return objectMapper.readTree(json);
+            return jsonMapper.readTree(json);
         } catch (Exception exception) {
             throw new JsonSerializationException(PARSE_ERROR, exception);
         }

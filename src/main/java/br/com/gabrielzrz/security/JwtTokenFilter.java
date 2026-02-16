@@ -16,7 +16,8 @@ import java.io.IOException;
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private static final int ONE_MB_IN_BYTES = 1_000_000;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -25,7 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
-        HttpServletRequest cachedRequest = new ContentCachingRequestWrapper(request);
+        HttpServletRequest cachedRequest = new ContentCachingRequestWrapper(request, ONE_MB_IN_BYTES);
         if (StringUtils.isNotBlank(token) && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
             if (auth != null) {

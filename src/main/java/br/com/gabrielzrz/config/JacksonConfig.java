@@ -1,15 +1,11 @@
 package br.com.gabrielzrz.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.SerializationFeature;
 
 import java.time.ZoneOffset;
 import java.util.TimeZone;
@@ -21,25 +17,19 @@ import java.util.TimeZone;
 public class JacksonConfig {
 
     @Bean
-    @Primary
-    @DependsOn("customize")
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        return builder.build();
-    }
+    public JsonMapperBuilderCustomizer customize() {
+        return builder -> builder
+                .defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
+                // Remove campos null do JSON ao serializar
+                .changeDefaultPropertyInclusion(inclusion ->
+                        JsonInclude.Value.construct(
+                                JsonInclude.Include.NON_EMPTY,  // Para valores
+                                JsonInclude.Include.NON_EMPTY   // Para conteúdo (coleções, arrays)
+                        )
+                )
+                .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT) // Trata strings vazias "" como null ao deserializar
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS) // Permite serializar objetos vazios (sem campos ou todos privados)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES); // Ignora propriedades no JSON que não existem na classe do Java
 
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer customize() {
-        return builder ->
-                builder.timeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
-                        .serializationInclusion(JsonInclude.Include.NON_NULL)
-                        .featuresToEnable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
-                        .featuresToDisable(
-                                SerializationFeature.FAIL_ON_EMPTY_BEANS,
-                                SerializationFeature.WRITE_DATES_WITH_ZONE_ID,
-                                SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE,
-                                SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, // To write in milliseconds
-                                DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, // To read in milliseconds
-                                DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE,
-                                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,10 +26,10 @@ public class PersistenceConfig {
 
     @Bean
     public AuditorAware<UUID> auditorProvider() {
-        return () -> Optional.ofNullable(SecurityContextHolder.getContext())
+        return () -> Optional.of(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .filter(this::isValidAuthentication)
-                .map(auth -> ((User) auth.getPrincipal()).getId());
+                .map(auth -> ((User) Objects.requireNonNull(auth.getPrincipal())).getId());
     }
 
     private boolean isValidAuthentication(Authentication auth) {

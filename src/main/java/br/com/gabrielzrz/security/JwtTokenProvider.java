@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class JwtTokenProvider {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public JwtTokenProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -64,16 +64,16 @@ public class JwtTokenProvider {
     }
 
     public Token createAccessToken(String username, List<String> roles) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime validity = now.plus(Duration.ofMillis(validityInMilliseconds * 3));
+        Instant now = Instant.now();
+        Instant validity = now.plus(Duration.ofMillis(validityInMilliseconds * 3));
         String accessToken = getAccessToken(username, roles, now, validity);
         String refreshToken = getRefreshToken(username, roles, now);
         return new Token(username, now, validity, accessToken, refreshToken);
     }
 
     public Token createAcessToken(String userName, List<String> roles) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime validity = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
+        Instant now = Instant.now();
+        Instant validity = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
         String accessToken = getAccessToken(userName, roles, now, validity);
         String refreshToken = getRefreshToken(userName, roles, now) ;
         return new Token(userName, now, validity, accessToken, refreshToken);
@@ -97,17 +97,14 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
         try {
-            if (decodedJWT.getExpiresAt().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or Invalid JWT Token");
+            return !decodedJWT.getExpiresAt().before(new Date());
+        } catch (Exception exception) {
+            throw new InvalidJwtAuthenticationException("Expired or Invalid JWT Token", exception);
         }
     }
 
-    private String getRefreshToken(String userName, List<String> roles, LocalDateTime now) {
-        LocalDateTime aaa = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
+    private String getRefreshToken(String userName, List<String> roles, Instant now) {
+        Instant aaa = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS);
         Date refreshTokenValidity = Date.from(aaa.atZone(ZoneId.systemDefault()).toInstant());
         return JWT.create()
                 .withClaim("roles", roles)
@@ -117,7 +114,7 @@ public class JwtTokenProvider {
                 .sign(algorithm);
     }
 
-    private String getAccessToken(String userName, List<String> roles, LocalDateTime now, LocalDateTime validity) {
+    private String getAccessToken(String userName, List<String> roles, Instant now, Instant validity) {
         return JWT.create()
                 .withClaim("roles", roles)
                 .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))

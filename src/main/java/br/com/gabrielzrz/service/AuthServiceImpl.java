@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountCredentials.username(), accountCredentials.password()));
         User user = userJpaRepository.findByUsername(accountCredentials.username());
         if (user == null) {
-            throw new UserNameNotFoundException("Usarname " + accountCredentials.username() + " not found");
+            throw new UserNameNotFoundException("Username " + accountCredentials.username() + " not found");
         }
         return jwtTokenProvider.createAcessToken(accountCredentials.username(), user.getRoles());
     }

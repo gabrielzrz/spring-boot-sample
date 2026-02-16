@@ -2,7 +2,7 @@ package br.com.gabrielzrz.dto.security;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * @author Zorzi
@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public record Token(
         String username,
 
-        LocalDateTime created,
+        Instant created,
 
-        LocalDateTime expiration,
+        Instant expiration,
 
         String accessToken,
 
