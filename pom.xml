@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.2</version>
+		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.gabrielzrz</groupId>
@@ -23,8 +23,8 @@
 		<springdoc-openapi-starter-webmvc-ui.version>3.0.1</springdoc-openapi-starter-webmvc-ui.version>
 		<java-jwt.version>4.5.0</java-jwt.version>
 		<apache.poi.version>5.2.5</apache.poi.version>
-		<apache.commons.version>1.11.0</apache.commons.version>
-		<p6spy-spring-boot-starter.version>1.12.0</p6spy-spring-boot-starter.version>
+		<apache.commons.version>1.14.0</apache.commons.version>
+		<p6spy-spring-boot-starter.version>2.0.0</p6spy-spring-boot-starter.version>
 		<commons-collections4.version>4.5.0</commons-collections4.version>
 		<uuid-creator.version>6.1.1</uuid-creator.version>
 	</properties>
@@ -124,7 +124,6 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
         </dependency>
 		<!--CSV-->
 		<dependency>
