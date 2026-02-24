@@ -28,9 +28,8 @@ public class DataTransferController {
         this.personService = personService;
     }
 
-    @PostMapping(value = "/importPeople",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Massive people creation with upload of XLSX or CSV")
+    @PostMapping(value = "/importPeople", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ImportResultDTO> importPeople(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             ImportResultDTO errorResult = createErrorResult("Arquivo vazio");
@@ -59,17 +58,14 @@ public class DataTransferController {
     }
 
     private HttpStatus determineHttpStatus(ImportResultDTO result) {
-        switch (result.getStatus()) {
-            case SUCCESS:
-                return HttpStatus.CREATED; // 201
-            case PARTIAL_SUCCESS:
+        return switch (result.getStatus()) {
+            case SUCCESS -> HttpStatus.CREATED; // 201
+            case PARTIAL_SUCCESS ->
                 // Alguns registros foram importados, outros falharam
-                return HttpStatus.PARTIAL_CONTENT; // 206
-            case FAILED:
+                    HttpStatus.PARTIAL_CONTENT; // 206
+            case FAILED ->
                 // Nenhum registro foi importado ou erro crítico
-                return HttpStatus.UNPROCESSABLE_ENTITY; // 422
-            default:
-                return HttpStatus.INTERNAL_SERVER_ERROR; // 500
-        }
+                    HttpStatus.UNPROCESSABLE_ENTITY; // 422
+        };
     }
 }

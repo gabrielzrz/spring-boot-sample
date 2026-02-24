@@ -41,7 +41,6 @@ public class PersonController {
         this.personService = personService;
     }
 
-    //GET
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Find by ID")
     public ResponseEntity<PersonResponseDTO> findById(@PathVariable("id") UUID id) {
@@ -49,7 +48,6 @@ public class PersonController {
         return ResponseEntity.ok(personResponseDTO);
     }
 
-    //POST
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -67,7 +65,6 @@ public class PersonController {
         return ResponseEntity.ok(pagedAssembler.toModel(peoplePage, personModelAssembler));
     }
 
-    //PUT
     @PutMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -77,7 +74,6 @@ public class PersonController {
         return ResponseEntity.noContent().build();
     }
 
-    //DELETE
     @DeleteMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "delete person")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
