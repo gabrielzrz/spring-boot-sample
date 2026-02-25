@@ -34,7 +34,7 @@ import java.util.UUID;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass().getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     private final ExceptionMessageParserService exceptionMessageParserService;
     private final PersonRepositoryPort personRepositoryPort;

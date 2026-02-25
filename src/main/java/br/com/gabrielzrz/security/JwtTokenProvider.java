@@ -41,7 +41,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key}")
     private String secretyKey = "secret";
 
-    private long validityInMilliseconds = TimeUnit.HOURS.toMillis(24);
+    private final long validityInMilliseconds = TimeUnit.HOURS.toMillis(24);
 
     Algorithm algorithm = null;
 
