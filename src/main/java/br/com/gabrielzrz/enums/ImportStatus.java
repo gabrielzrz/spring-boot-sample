@@ -10,7 +10,7 @@ public enum ImportStatus {
     FAILED("Importação falhou");
 
     // Variables
-    private String description;
+    private final String description;
 
     // Constructor
     ImportStatus(String description) {

@@ -1,8 +1,6 @@
 package br.com.gabrielzrz.repository.jpa;
 
-import br.com.gabrielzrz.model.Person;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import br.com.gabrielzrz.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,9 +16,4 @@ import java.util.UUID;
  */
 @Repository
 public interface PersonJpaRepository extends JpaRepository<Person, UUID>, JpaSpecificationExecutor<Person> {
-
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query("UPDATE Person p SET p.enabled = FALSE WHERE p.id = :id")
-    int disablePerson(@Param("id") UUID id);
 }

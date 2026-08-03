@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.controllers;
 
-import br.com.gabrielzrz.service.contract.PersonService;
+import br.com.gabrielzrz.service.PersonService;
 import br.com.gabrielzrz.dto.response.ImportResultDTO;
 import br.com.gabrielzrz.enums.ImportStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "Data Transfer", description = "Data Import or Export Operations")
 @RestController
 @RequestMapping("/api/data-transfer")
+@PreAuthorize("hasRole('COMMON_USER')")
 public class DataTransferController {
 
     private final PersonService personService;
@@ -59,13 +61,13 @@ public class DataTransferController {
 
     private HttpStatus determineHttpStatus(ImportResultDTO result) {
         return switch (result.getStatus()) {
-            case SUCCESS -> HttpStatus.CREATED; // 201
+            case SUCCESS -> HttpStatus.CREATED;
             case PARTIAL_SUCCESS ->
                 // Alguns registros foram importados, outros falharam
-                    HttpStatus.PARTIAL_CONTENT; // 206
+                    HttpStatus.PARTIAL_CONTENT;
             case FAILED ->
                 // Nenhum registro foi importado ou erro crítico
-                    HttpStatus.UNPROCESSABLE_ENTITY; // 422
+                    HttpStatus.UNPROCESSABLE_ENTITY;
         };
     }
 }

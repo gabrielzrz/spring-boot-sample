@@ -1,7 +1,7 @@
 package br.com.gabrielzrz.repository.jpa;
 
 import br.com.gabrielzrz.enums.ParameterType;
-import br.com.gabrielzrz.model.Parameter;
+import br.com.gabrielzrz.entity.Parameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package br.com.gabrielzrz.controllers;
 
 import br.com.gabrielzrz.dto.response.UploadFileResponse;
-import br.com.gabrielzrz.service.contract.FileStorageService;
+import br.com.gabrielzrz.service.FileStorageService;
 import br.com.gabrielzrz.util.LambdaUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,7 @@ import java.util.Optional;
 @Tag(name = "File", description = "Upload and Download to files")
 @RestController
 @RequestMapping("/api/file-storage")
+@PreAuthorize("hasRole('COMMON_USER')")
 public class FileStorageController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass().getName());

@@ -1,0 +1,240 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="gabriel (generated)" id="1750035908356-1">
+        <createSequence incrementBy="50" sequenceName="revinfo_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-2">
+        <createTable tableName="revinfo">
+            <column autoIncrement="true" name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="revinfoPK"/>
+            </column>
+            <column name="revtstmp" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-3">
+        <createTable tableName="branch">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="branchPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_headquarters" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-4">
+        <createTable tableName="branch_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="branch_name" type="VARCHAR(100)"/>
+            <column name="is_active" type="BOOLEAN"/>
+            <column name="is_headquarters" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-5">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_non_expired" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_non_locked" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credentials_non_expired" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-6">
+        <createTable tableName="users_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="username" type="VARCHAR(50)"/>
+            <column name="full_name" type="VARCHAR(150)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="enabled" type="BOOLEAN"/>
+            <column name="account_non_expired" type="BOOLEAN"/>
+            <column name="account_non_locked" type="BOOLEAN"/>
+            <column name="credentials_non_expired" type="BOOLEAN"/>
+            <column name="branch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-7">
+        <createTable tableName="permission">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="permissionPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-8">
+        <createTable tableName="permission_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="description" type="VARCHAR(30)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-9">
+        <createTable tableName="user_permission">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_permissionPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="version" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_user" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_permission" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-10">
+        <createTable tableName="user_permission_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="created_by" type="UUID"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="UUID"/>
+            <column name="id_user" type="UUID"/>
+            <column name="id_permission" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-11">
+        <addPrimaryKey columnNames="rev, id" constraintName="branch_audPK" tableName="branch_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-12">
+        <addPrimaryKey columnNames="rev, id" constraintName="permission_audPK" tableName="permission_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-13">
+        <addPrimaryKey columnNames="rev, id" constraintName="users_audPK" tableName="users_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-14">
+        <addPrimaryKey columnNames="rev, id" constraintName="user_permission_audPK" tableName="user_permission_aud"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-15">
+        <addUniqueConstraint columnNames="username" constraintName="UC_USERSUSER_NAME_COL" tableName="users"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-16">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="branch_aud" constraintName="FK6jkm88122iurk8et84u29phc2" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-17">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="user_permission_aud" constraintName="FK4fdtokejq6bnwru0oci9tii0" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-18">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="permission_aud" constraintName="FK8p00qhf8aau42hacp13k6x5hh" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-19">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="users_aud" constraintName="FKc4vk4tui2la36415jpgm9leoq" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-20">
+        <addForeignKeyConstraint baseColumnNames="id_permission" baseTableName="user_permission" constraintName="FKo47t1we6do84ku6rb9jcey2s9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="permission" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-21">
+        <addForeignKeyConstraint baseColumnNames="id_user" baseTableName="user_permission" constraintName="FKprpp02ivhe66b5nrc0a3a4lk8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (manual)" id="1750035908356-22">
+        <addForeignKeyConstraint baseColumnNames="branch_id" baseTableName="users" constraintName="FK_users_branch" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="branch" validate="true"/>
+    </changeSet>
+    <changeSet author="gabriel (generated)" id="1750035908356-23">
+        <sql>
+            INSERT INTO branch (id, created_at, created_by, updated_at, updated_by, VERSION, branch_name , is_active, is_headquarters)
+            VALUES ('0199db43-594f-74cf-bdcf-5357ae18a358'::uuid, now(), '0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, NULL, NULL, 0, 'MATRIZ', TRUE, TRUE);
+
+            INSERT INTO permission (id, description, created_at, "version") VALUES
+            ('019fbf61-1e4b-7655-996f-f9bf1d47ea4a'::uuid, 'SUPPORT', now(), 0),
+            ('0199bc08-ab89-7e07-abd4-d9ec4723178c'::uuid, 'ADMIN', now(), 0),
+            ('019fbf31-e509-7cc9-abe1-9f3d846fae0b'::uuid, 'MANAGER', now(), 0),
+            ('019fbf32-0a61-7124-998c-62733198d319'::uuid, 'COMMON_USER', now(), 0);
+
+            INSERT INTO users (id, username, full_name, password, account_non_expired, account_non_locked, credentials_non_expired, enabled, branch_id, created_at, "version")
+            VALUES ('0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, 'suporte', 'suporte', '{pbkdf2}72db79a9cbc99498a594fb5e7e122064cd560f221340992e07ae5b6575498d11b1daff7959595def163596b054ac50f4', true, true, true, true, '0199db43-594f-74cf-bdcf-5357ae18a358'::uuid, now(), 0);
+
+            INSERT INTO public.user_permission (id, id_user, id_permission, created_at, "version")
+            VALUES ('2cc056eb-3f3a-4bbd-aa23-2acd8397ad4c'::uuid, '0199bc08-ab8a-777c-bf39-7f35246e7bf6'::uuid, '019fbf61-1e4b-7655-996f-f9bf1d47ea4a'::uuid, now(), 0);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

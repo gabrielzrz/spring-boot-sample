@@ -3,7 +3,7 @@ package br.com.gabrielzrz.mapper;
 import br.com.gabrielzrz.config.MapStructConfig;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
-import br.com.gabrielzrz.model.Person;
+import br.com.gabrielzrz.entity.Person;
 import org.mapstruct.Mapper;
 
 import java.util.HashSet;

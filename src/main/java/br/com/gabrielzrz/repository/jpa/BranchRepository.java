@@ -1,6 +1,6 @@
 package br.com.gabrielzrz.repository.jpa;
 
-import br.com.gabrielzrz.model.Branch;
+import br.com.gabrielzrz.entity.Branch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

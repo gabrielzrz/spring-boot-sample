@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * @author Zorzi
  */
-@IdGeneratorType(br.com.gabrielzrz.model.generator.UuidGeneratorCustom.class)
+@IdGeneratorType(br.com.gabrielzrz.entity.generator.UuidGeneratorCustom.class)
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface UuidGeneratorCustom {

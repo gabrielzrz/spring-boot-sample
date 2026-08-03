@@ -1,7 +1,7 @@
 package br.com.gabrielzrz.repository.specification;
 
 import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
-import br.com.gabrielzrz.model.Person;
+import br.com.gabrielzrz.entity.Person;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

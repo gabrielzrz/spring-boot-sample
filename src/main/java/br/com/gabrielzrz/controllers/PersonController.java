@@ -4,7 +4,7 @@ import br.com.gabrielzrz.controllers.assembler.PersonModelAssembler;
 import br.com.gabrielzrz.dto.request.filters.PersonFilterRequest;
 import br.com.gabrielzrz.dto.request.PersonRequestDTO;
 import br.com.gabrielzrz.dto.response.PersonResponseDTO;
-import br.com.gabrielzrz.service.contract.PersonService;
+import br.com.gabrielzrz.service.PersonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,6 +16,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ import java.util.UUID;
 @Tag(name = "Person", description = "Operations related to Person")
 @RestController
 @RequestMapping("/api/person")
+@PreAuthorize("hasRole('COMMON_USER')")
 public class PersonController {
 
     private final PersonModelAssembler personModelAssembler;
@@ -43,7 +45,7 @@ public class PersonController {
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Find by ID")
-    public ResponseEntity<PersonResponseDTO> findById(@PathVariable("id") UUID id) {
+    public ResponseEntity<PersonResponseDTO> findById(@PathVariable UUID id) {
         PersonResponseDTO personResponseDTO = personService.findById(id);
         return ResponseEntity.ok(personResponseDTO);
     }

@@ -1,9 +1,9 @@
 package br.com.gabrielzrz.exception.handler;
 
 import br.com.gabrielzrz.dto.response.ExceptionResponse;
-import br.com.gabrielzrz.service.contract.JsonService;
+import br.com.gabrielzrz.service.JsonService;
 import br.com.gabrielzrz.exception.*;
-import br.com.gabrielzrz.service.contract.DiscordWebhookService;
+import br.com.gabrielzrz.service.DiscordWebhookService;
 import br.com.gabrielzrz.util.SecurityContextUtil;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletRequestWrapper;
@@ -15,7 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -82,6 +86,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class})
     public final ResponseEntity<ExceptionResponse> handleUnauthorizedException(Exception exception, HttpServletRequest request) {
+        String url = request.getRequestURI();
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        logUnexpectedError(exception, url, httpStatus, request);
+        ExceptionResponse response = new ExceptionResponse(url, httpStatus, httpStatus.value(), exception.getMessage(), "");
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @ExceptionHandler({DisabledException.class, LockedException.class, AccountExpiredException.class, CredentialsExpiredException.class})
+    public final ResponseEntity<ExceptionResponse> handleAccountStatusException(Exception exception, HttpServletRequest request) {
         String url = request.getRequestURI();
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         logUnexpectedError(exception, url, httpStatus, request);

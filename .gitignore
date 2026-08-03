@@ -12,6 +12,7 @@ p6spy.log
 
 # SSH Keys
 *.pem
+!src/main/resources/certs/spring-boot-key-public.pem
 *.ppk
 
 # Mobile Tools for Java (J2ME)
